@@ -1,0 +1,15 @@
+# .gitignore template for skeleton-based apps
+/api/
+/build/
+/test/
+/source/script/
+
+# node-related files
+/node_modules
+npm-debug.log
+
+# Pretty versions of deps
+source/resource/qxjoint/js/jquery.js
+source/resource/qxjoint/js/backbone.js
+source/resource/qxjoint/js/lodash.js
+source/resource/qxjoint/js/joint.js
