@@ -73,7 +73,7 @@ qx.Mixin.define("qxjoint.node.MNode",
       return this
     },
 
-    destruct : function () {
+    dispose : function () {
       if (this.getJointNode() != null) {
         this.getJointNode().remove();
       }
