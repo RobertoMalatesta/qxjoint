@@ -11,7 +11,8 @@
 /**
  * This is the main application class of your custom application "qxjoint"
  *
- * @ asset(qxjoint/*)
+ * @asset(qxjoint/*)
+ * @ignore(joint.*)
  */
 qx.Class.define("qxjoint.Application",
 {
@@ -75,12 +76,21 @@ qx.Class.define("qxjoint.Application",
         decorator : "main"
       });
       paper.addListener("change:paper", function(e) {
-        var node1 = new qxjoint.node.Rect()
-        node1.setText('Node 1');
-        var node2 = new qxjoint.node.Qx()
-        //node2.setText('Node 2');
-        node2.translate(150, 150);
+        var node1 = new qxjoint.node.Window("qxjoint.node.Window")
+        node1.setLayout(new qx.ui.layout.VBox(10));
+        node1.add(new qx.ui.form.Button("Hello World"));
+        node1.moveTo(100, 100);
+        var node2 = new qxjoint.node.Window("qxjoint.node.Window")
+        node2.setLayout(new qx.ui.layout.VBox(10));
+        node2.add(new qx.ui.form.Button("Hello qxjoint"));
+        node2.moveTo(100, 300);
         paper.addNode(node1).addNode(node2);
+
+        var link = new joint.dia.Link({
+            source: { id: node1.getJointNode().id },
+            target: { id: node2.getJointNode().id }
+        });
+        paper.getJointGraph().addCell(link);
       }, this);
 
       main_container.add(paper,

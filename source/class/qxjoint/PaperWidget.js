@@ -10,7 +10,7 @@ var ID = 0;
  * @asset(qxjoint/*)
  */
 qx.Class.define("qxjoint.PaperWidget", {
-    extend : qx.ui.core.Widget,
+    extend : qx.ui.window.Desktop,
 
     construct : function() {
         this.base(arguments);
@@ -37,12 +37,12 @@ qx.Class.define("qxjoint.PaperWidget", {
     },
 
     members: {
-        __cssId: null,
-        __domElement: null,
+        __cssId : null,
+        __htmlWidget : null,
 
         _applyGraph : function(value) {
           var action = qx.lang.Function.bind(function() {
-              var el = this.__domElement;
+              var el = this.__htmlWidget.getContentElement().getDomElement();
 
               // Clear existing papers
               if (this.getJointPaper() != null) {
@@ -53,35 +53,51 @@ qx.Class.define("qxjoint.PaperWidget", {
 
               var paper = new joint.dia.Paper({
                   el: el,
-                  width: this.getBounds().width,
-                  height: this.getBounds().height,
+                  width: this.__htmlWidget.getBounds().width,
+                  height: this.__htmlWidget.getBounds().height,
                   model: value,
                   gridSize: 1
               });
               this.setJointPaper(paper);
           }, this);
 
-          if (this.__domElement == null) {
-            this.addListenerOnce('appear',function(e){
-                var el = this.getContentElement().getDomElement();
-                qx.bom.element.Attribute.set(el,'id', this._cssId);
+          if (this.__htmlWidget == null) {
+            this.addListenerOnce('appear', function(e) {
+              var widget = new qx.ui.embed.Html();
+              var bounds = this.getBounds();
+              widget.setUserBounds(0, 0, bounds.width, bounds.height)
+              this.add(widget);
 
-                this.__domElement = el
+              this.__htmlWidget = widget;
 
-                action();
-            },this);
+              widget.addListenerOnce('appear',function(e){
+                  var el = this.__htmlWidget
+                    .getContentElement()
+                    .getDomElement();
+                  qx.bom.element.Attribute.set(el,'id', this._cssId);
+
+                  action();
+              },this);
+            });
           } else {
             action();
           }
         },
 
         addNode : function(node) {
-          if (!qx.Class.isSubClassOf(node.constructor, qxjoint.node.Base)) {
-            throw new TypeError('"node" must be a subclass of qxjoint.Node.');
+          if (!qx.Class.hasOwnMixin(node.constructor, qxjoint.node.MNode)) {
+            throw new TypeError(
+              '"node" must include the mixin ' +
+              'qxjoint.node.MNode.');
           }
 
           node.create();
           this.getJointGraph().addCells([node.getJointNode()]);
+
+          if (qx.Class.isSubClassOf(node.constructor, qx.ui.core.Widget)) {
+            this.add(node);
+            node.show();
+          }
 
           return this;
         }

@@ -2,8 +2,11 @@
  * @asset(qxjoint/*)
  * @ignore(joint.shapes.basic.Rect)
  */
-qx.Class.define("qxjoint.node.Rect", {
-  extend : qxjoint.node.Base,
+qx.Class.define("qxjoint.node.Rect",
+{
+  extend : qx.core.Object,
+  include : [qxjoint.node.MNode],
+
 
   construct : function() {
       this.base(arguments);

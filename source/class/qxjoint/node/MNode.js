@@ -1,13 +1,8 @@
 /**
  * @asset(qxjoint/*)
  */
-qx.Class.define("qxjoint.node.Base", {
-  extend : qx.core.Object,
-
-  construct : function() {
-      this.base(arguments);
-  },
-
+qx.Mixin.define("qxjoint.node.MNode",
+{
   properties : {
       position :
       {
@@ -31,12 +26,6 @@ qx.Class.define("qxjoint.node.Base", {
   },
 
   members : {
-    // overridden
-    _makeNode : function () {
-      throw new Error("Do not use qxjoint.node.Base directly, " +
-                      "extend it and implement the member _makeNode.");
-    },
-
     create : function () {
       var node = this._makeNode();
       node.qx = this;
