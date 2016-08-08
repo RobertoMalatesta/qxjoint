@@ -6,18 +6,23 @@ var ID = 0;
  */
 qx.Class.define("qxjoint.widget.Minimap",
 {
- extend : qx.ui.core.Widget,
- include : [qx.ui.core.MNativeOverflow],
+  extend : qx.ui.core.Widget,
+  include : [qx.ui.core.MNativeOverflow],
 
- construct : function() {
-   this.base(arguments);
-   this.setOverflow("auto", "auto");
+  construct : function() {
+    this.base(arguments);
+    this.setOverflow("auto", "auto");
 
-   ID++;
-   this.__cssId = '#qxjointmm-'+ID;
- },
+    ID++;
+    this.__cssId = "#qxjointmm-"+ID;
 
- properties : {
+    this.addListener("resize", function(e) {
+      this.scaleContentToFit({padding: 5});
+    }, this);
+    this.scaleContentToFit({padding: 5});
+  },
+
+  properties : {
    jointPaper: {
      event: "change:jointPaper",
      nullable: true
@@ -28,19 +33,33 @@ qx.Class.define("qxjoint.widget.Minimap",
      nullable: true,
      apply: "_applyPaper"
    }
- },
+  },
 
- members : {
+  members : {
    __cssId : null,
+
+  scaleContentToFit : function(opts) {
+    var action = qx.lang.Function.bind(function() {
+      var jPaper = this.getJointPaper();
+      bounds = this.getBounds();
+      jPaper.setDimensions(bounds.width - 12, bounds.height - 12);
+      jPaper.scaleContentToFit(opts);
+    }, this);
+
+    if (this.getJointPaper()) {
+      action();
+    } else {
+      this.addListenerOnce("change:jointPaper", function(e) {
+        action();
+      }, this);
+    }
+  },
 
    scale : function(sx, sy, ox, oy) {
      var sy = sy || sx
      var action = qx.lang.Function.bind(function() {
        var jPaper = this.getJointPaper();
-       jPaper.scale(sx, sy, ox, oy);
-       // jPaper.fitToContent();
-      //  this.width = jPaper.width;
-      //  this.height = jPaper.height;
+        jPaper.scale(sx, sy, ox, oy);
      }, this);
 
      if (this.getJointPaper()) {
@@ -67,7 +86,9 @@ qx.Class.define("qxjoint.widget.Minimap",
              width: value.getBounds().width,
              height: value.getBounds().height,
              model: value.getJointGraph(),
-             gridSize: 1
+             gridSize: 1,
+             linkPinning: false,
+             async: true
          });
          this.setJointPaper(paper);
      }, this);

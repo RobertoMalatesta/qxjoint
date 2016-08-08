@@ -38,9 +38,9 @@ qx.Class.define("qxjoint.Application",
     layout : function()
     {
       var main_container = new qx.ui.container.Composite();
-      var layout = new qx.ui.layout.Grid();
-      layout.setColumnFlex(1, 2);
-      layout.setRowFlex(1, 3);
+      var layout = new qx.ui.layout.Grid(2, 2);
+      layout.setColumnFlex(1, 1);
+      layout.setRowFlex(1, 1);
       layout.setSpacing(5);
       main_container.setLayout(layout);
 
@@ -50,38 +50,64 @@ qx.Class.define("qxjoint.Application",
       paper.setLinkPinning(false);
 
       // Logo
-      main_container.add(new qx.ui.core.Widget().set({decorator : "main"}),
+      layout = new qx.ui.layout.Atom()
+      layout.setCenter(true);
+      var logocontainer = new qx.ui.container.Composite(layout).set(
       {
+        decorator : "main"
+      });
+      main_container.add(logocontainer, {
         row : 0,
         column : 0
       });
+      logocontainer.add(new qx.ui.basic.Label().set({
+        value: '<a href="https://github.com/drawstack/qxjoint" target="_blank"><strong style="font-size: 24px;">QxJoint</strong></a>',
+        rich: true,
+        width: 120
+      }));
 
       // Navigation/toolbar
-      main_container.add(new qx.ui.core.Widget().set( {
+      layout = new qx.ui.layout.Atom()
+      layout.setCenter(true);
+      var navcontainer = new qx.ui.container.Composite(layout).set(
+      {
         decorator : "main"
-      }),
+      });
+      main_container.add(navcontainer,
       {
         row : 0,
         column : 1
       });
+      navcontainer.add(new qx.ui.basic.Label().set({
+        value: '<strong>An integration library of JointJS into qooxdoo.</strong>',
+        rich: true,
+        width: 360
+      }));
 
-      // Left column
-      var leftColumn = new qx.ui.container.SlideBar("vertical");
-      var layout = new qx.ui.layout.VBox();
-      layout.setSpacing(10);
-      leftColumn.setLayout(layout);
-      main_container.add(leftColumn, {
+      // Content row
+      var  crow = new qx.ui.splitpane.Pane("horizontal");
+      main_container.add(crow, {
         row : 1,
-        column : 0
+        column : 0,
+        colSpan: 2
       });
 
+      // Left column
+      var leftColumn = new qx.ui.container.Composite(new qx.ui.layout.Grow).set({
+        width : 200,
+        decorator : "main"
+      });
+      var leftColumn_layout = new qx.ui.layout.VBox();
+      leftColumn.setLayout(leftColumn_layout);
+      crow.add(leftColumn, 0);
 
       // Nav paper
       var minimap = new qxjoint.widget.Minimap().set({
-        decorator : "main"
+        decorator : "main",
+        width: 200,
+        height: 200
       });
       minimap.setPaper(paper);
-      minimap.scale(0.2);
       leftColumn.add(minimap);
 
       // Main content
@@ -171,25 +197,16 @@ qx.Class.define("qxjoint.Application",
           link_nginx, link_varnish,
           link_quaive1, link_quaive2
         ]);
+
+        minimap.scaleContentToFit({padding: 5});
       }, this);
 
-      main_container.add(paper,
-      {
-        row : 1,
-        column : 1
-      });
+      crow.add(paper, 1);
 
       main_container.getChildren()[0].setWidth(200);
       main_container.getChildren()[2].setWidth(200);
       var application_root = this.getRoot();
-      application_root.add(main_container);
-      application_root.addListener("resize", function(e) {
-        main_container.set(
-        {
-          "width" : qx.bom.Viewport.getWidth(),
-          "height" : qx.bom.Viewport.getHeight()
-        });
-      }, this);
+      application_root.add(main_container, {edge: 0});
     }
   }
 });

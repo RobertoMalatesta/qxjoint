@@ -91,6 +91,11 @@ qx.Class.define("qxjoint.widget.Container",
      this.setHeight((hm * height + (hm * spacing)) + spacing + cbHeight + 3)
    },
 
+   // Overriden
+   close : function() {
+     this.destroy();
+   },   
+
    _onMovePointerMove : function(e) {
      this.base(arguments, e);
 

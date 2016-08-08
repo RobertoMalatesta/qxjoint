@@ -69,7 +69,8 @@ qx.Class.define("qxjoint.widget.Paper", {
                 height: this.__htmlWidget.getBounds().height,
                 model: value,
                 gridSize: 1,
-                linkPinning: false
+                linkPinning: false,
+                async: true
             });
             this.setJointPaper(paper);
         }, this);

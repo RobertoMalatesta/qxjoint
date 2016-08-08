@@ -83,6 +83,11 @@ qx.Class.define("qxjoint.node.Window",
       }
     },
 
+    // Overriden
+    close : function() {
+      this.destroy();
+    },
+
     /**
      * Overwriting qx.ui.core.MMovable._onPointerMove here to set
      * the position of the jointJS element.
@@ -94,6 +99,13 @@ qx.Class.define("qxjoint.node.Window",
       this.base(arguments, e);
 
       this.onPointerMove();
+    },
+
+    destroy : function()
+    {
+      this.base(arguments);
+
+      this.dispose();
     }
   }
 });
