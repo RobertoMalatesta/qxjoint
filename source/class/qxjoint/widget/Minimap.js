@@ -17,9 +17,9 @@ qx.Class.define("qxjoint.widget.Minimap",
     this.__cssId = "#qxjointmm-"+ID;
 
     this.addListener("resize", function(e) {
-      this.scaleContentToFit({padding: 5});
+      this.scaleContentToFit();
     }, this);
-    this.scaleContentToFit({padding: 5});
+    this.scaleContentToFit();
   },
 
   properties : {
@@ -32,6 +32,10 @@ qx.Class.define("qxjoint.widget.Minimap",
      event: "change:paper",
      nullable: true,
      apply: "_applyPaper"
+   },
+
+   scalePadding: {
+     init: 5
    }
   },
 
@@ -39,9 +43,13 @@ qx.Class.define("qxjoint.widget.Minimap",
    __cssId : null,
 
   scaleContentToFit : function(opts) {
+    opts = opts || {}
+    if (!"padding" in opts) {
+      opts.padding = this.getScalePadding();
+    }
     var action = qx.lang.Function.bind(function() {
       var jPaper = this.getJointPaper();
-      bounds = this.getBounds();
+      var bounds = this.getBounds();
       jPaper.setDimensions(bounds.width - 12, bounds.height - 12);
       jPaper.scaleContentToFit(opts);
     }, this);
@@ -81,10 +89,11 @@ qx.Class.define("qxjoint.widget.Minimap",
          var el = this.getContentElement().getDomElement();
          qx.bom.element.Attribute.set(el,'id', this._cssId);
 
+         var bounds = this.getBounds();
          var paper = new joint.dia.Paper({
              el: el,
-             width: value.getBounds().width,
-             height: value.getBounds().height,
+             width: bounds.width - 12,
+             height: bounds.height - 12,
              model: value.getJointGraph(),
              gridSize: 1,
              linkPinning: false,

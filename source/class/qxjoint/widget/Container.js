@@ -3,54 +3,66 @@
  */
 qx.Class.define("qxjoint.widget.Container",
 {
- extend : qx.ui.window.Window,
- include : [qxjoint.MGraph],
+  extend : qx.ui.window.Window,
+  include : [qxjoint.MGraph],
 
- construct : function(caption, icon) {
-   this.base(arguments, caption, icon);
+  construct : function(caption, icon) {
+    this.base(arguments, caption, icon);
 
-   this.setShowMaximize(false);
-   this.setShowMinimize(false);
-   this.setContentPadding(0);
+    this.setShowMaximize(false);
+    this.setShowMinimize(false);
+    this.setContentPadding(0);
 
-   // For our _onMovePointerMove patch.
-   this.setUseMoveFrame(false);
+    // For our _onMovePointerMove patch.
+    this.setUseMoveFrame(false);
 
-   var layout = new qx.ui.layout.Grow();
-   this.setLayout(layout);
-   var desktop = new qx.ui.window.Desktop();
-   this.set({backgroundColor: "rgba(255,255,255,0.3)"});
-   this.add(desktop);
- },
+    var layout = new qx.ui.layout.Grow();
+    this.setLayout(layout);
+    this.set({backgroundColor: "rgba(255,255,255,0.3)"});
+  },
 
- properties : {
-  autoReorder : { check: "Boolean", init: false },
-  autoReorderSpacing :  { check: "Integer", init: 10 }
-},
+  properties : {
+    autoReorder : { check: "Boolean", init: false },
+    autoReorderSpacing :  { check: "Integer", init: 10 },
 
- members : {
-   /**
-    * Add a either a wrapped JointJS node and/or a qx.ui.core.Widget.
-    *
-    * gets called by qxjoint.MGraphHolder.addNode()
-    */
-   _addNode : function(node) {
-     if (qx.core.Environment.get("qx.debug")) {
-       this.assertInstance(node, qxjoint.node.Window);
-     }
+    paper :
+    {
+      check : "qxjoint.widget.Paper"
+    }
+  },
 
-     node.setPaper(this.getLayoutParent());
-     node.set({opacity: 1.0})
-     var desktop = this.getChildren()[0];
-     desktop.add(node);
-     desktop.getWindows()[0].addListenerOnce(
-       "appear",
-       this.updateBoundsAndContentsAlignment,
-       this
-     );
-     var spacing = this.getAutoReorderSpacing();
-     node.moveTo(spacing, spacing);
-     node.show();
+  members : {
+    __desktop : null,
+
+     /**
+      * Add a either a wrapped JointJS node and/or a qx.ui.core.Widget.
+      *
+      * gets called by qxjoint.MGraphHolder.addNode()
+      */
+    _addNode : function(node) {
+      if (!this.__desktop) {
+         this.__desktop = new qx.ui.window.Desktop(
+           this.getPaper().getWindowManager()
+         );
+         this.add(this.__desktop);
+      }
+
+       if (qx.core.Environment.get("qx.debug")) {
+         this.assertInstance(node, qxjoint.node.Window);
+       }
+
+       node.setPaper(this.getLayoutParent());
+       node.set({opacity: 1.0})
+       var desktop = this.getChildren()[0];
+       desktop.add(node);
+       desktop.getWindows()[0].addListenerOnce(
+         "appear",
+         this.updateBoundsAndContentsAlignment,
+         this
+       );
+       var spacing = this.getAutoReorderSpacing();
+       node.moveTo(spacing, spacing);
+       node.show();
    },
 
    updateBoundsAndContentsAlignment : function(e) {
@@ -79,7 +91,6 @@ qx.Class.define("qxjoint.widget.Container",
              ((div * height) + (div * spacing)) + spacing
            );
          }
-         childs[i-1].onPointerMove();
        }
      }
 
@@ -94,7 +105,7 @@ qx.Class.define("qxjoint.widget.Container",
    // Overriden
    close : function() {
      this.destroy();
-   },   
+   },
 
    _onMovePointerMove : function(e) {
      this.base(arguments, e);
@@ -103,5 +114,5 @@ qx.Class.define("qxjoint.widget.Container",
        child.onPointerMove();
      });
    }
- }
+  }
 });

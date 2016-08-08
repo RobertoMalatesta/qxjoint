@@ -93,12 +93,10 @@ qx.Class.define("qxjoint.Application",
       });
 
       // Left column
-      var leftColumn = new qx.ui.container.Composite(new qx.ui.layout.Grow).set({
+      var leftColumn = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
         width : 200,
         decorator : "main"
       });
-      var leftColumn_layout = new qx.ui.layout.VBox();
-      leftColumn.setLayout(leftColumn_layout);
       crow.add(leftColumn, 0);
 
       // Nav paper
@@ -197,8 +195,6 @@ qx.Class.define("qxjoint.Application",
           link_nginx, link_varnish,
           link_quaive1, link_quaive2
         ]);
-
-        minimap.scaleContentToFit({padding: 5});
       }, this);
 
       crow.add(paper, 1);

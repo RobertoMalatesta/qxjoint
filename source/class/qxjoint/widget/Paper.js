@@ -82,7 +82,8 @@ qx.Class.define("qxjoint.widget.Paper", {
        * gets called by qxjoint.MGraphHolder.addNode()
        */
       _addNode : function(node) {
-        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.node.MNode)) {
+        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.node.MNode) ||
+            qx.Class.isSubClassOf(node.constructor, qxjoint.widget.Container)) {
           node.setPaper(this);
         }
 

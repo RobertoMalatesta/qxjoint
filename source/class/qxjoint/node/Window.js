@@ -64,7 +64,7 @@ qx.Class.define("qxjoint.node.Window",
       }
     },
 
-    onPointerMove : function() {
+    onPointerMove : function(e) {
       var domEl = this.getContentElement().getDomElement();
       var paperEl = this.getPaper().getContentElement().getDomElement();
 
@@ -98,7 +98,7 @@ qx.Class.define("qxjoint.node.Window",
     _onMovePointerMove : function(e) {
       this.base(arguments, e);
 
-      this.onPointerMove();
+      this.onPointerMove(e);
     },
 
     destroy : function()
