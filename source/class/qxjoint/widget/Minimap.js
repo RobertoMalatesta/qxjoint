@@ -19,7 +19,13 @@ qx.Class.define("qxjoint.widget.Minimap",
     this.addListener("resize", function(e) {
       this.scaleContentToFit();
     }, this);
-    this.scaleContentToFit();
+
+    // Scale the map every second.
+    var timer = new qx.event.Timer(1000);
+    timer.addListener("interval", function(e) {
+      this.scaleContentToFit();
+    }, this);
+    timer.start();
   },
 
   properties : {
