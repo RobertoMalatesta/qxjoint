@@ -44,10 +44,13 @@ qx.Class.define("qxjoint.Application",
       layout.setSpacing(5);
       main_container.setLayout(layout);
 
-      // Logo
-      main_container.add(new qx.ui.core.Widget().set( {
+      var paper = new qxjoint.widget.Paper().set({
         decorator : "main"
-      }),
+      });
+      paper.setLinkPinning(false);
+
+      // Logo
+      main_container.add(new qx.ui.core.Widget().set({decorator : "main"}),
       {
         row : 0,
         column : 0
@@ -63,34 +66,111 @@ qx.Class.define("qxjoint.Application",
       });
 
       // Left column
-      main_container.add(new qx.ui.core.Widget().set( {
-        decorator : "main"
-      }),
-      {
+      var leftColumn = new qx.ui.container.SlideBar("vertical");
+      var layout = new qx.ui.layout.VBox();
+      layout.setSpacing(10);
+      leftColumn.setLayout(layout);
+      main_container.add(leftColumn, {
         row : 1,
         column : 0
       });
 
-      // Main content
-      var paper = new qxjoint.PaperWidget().set({
+
+      // Nav paper
+      var minimap = new qxjoint.widget.Minimap().set({
         decorator : "main"
       });
-      paper.addListener("change:paper", function(e) {
-        var node1 = new qxjoint.node.Window("qxjoint.node.Window")
-        node1.setLayout(new qx.ui.layout.VBox(10));
-        node1.add(new qx.ui.form.Button("Hello World"));
-        node1.moveTo(100, 100);
-        var node2 = new qxjoint.node.Window("qxjoint.node.Window")
-        node2.setLayout(new qx.ui.layout.VBox(10));
-        node2.add(new qx.ui.form.Button("Hello qxjoint"));
-        node2.moveTo(100, 300);
-        paper.addNode(node1).addNode(node2);
+      minimap.setPaper(paper);
+      minimap.scale(0.2);
+      leftColumn.add(minimap);
 
-        var link = new joint.dia.Link({
-            source: { id: node1.getJointNode().id },
-            target: { id: node2.getJointNode().id }
+      // Main content
+
+      paper.addListener("change:jointPaper", function(e) {
+        var dns = new qxjoint.node.Window("DNS")
+        dns.moveTo(100, 100);
+        paper.addNode(dns);
+
+        var router = new qxjoint.node.Window("Router")
+        router.moveTo(300, 100);
+        paper.addNode(router);
+
+        var c1002 = new qxjoint.widget.Container("C1002");
+        c1002.setAutoReorder(true);
+        c1002.moveTo(300, 300);
+        paper.addNode(c1002);
+
+        var c1002_nignx = new qxjoint.node.Window('NGINX');
+        var c1002_varnish = new qxjoint.node.Window('Varnish');
+        var c1002_haproxy = new qxjoint.node.Window('haproxy');
+        c1002.addNode(c1002_nignx);
+        c1002.addNode(c1002_varnish);
+        c1002.addNode(c1002_haproxy);
+
+        var c1003 = new qxjoint.widget.Container("C1003");
+        c1003.setAutoReorder(true);
+        c1003.moveTo(600, 300);
+        paper.addNode(c1003);
+
+        var c1003_plone = new qxjoint.node.Window('Plone');
+        c1003.addNode(c1003_plone);
+
+        var c1000 = new qxjoint.widget.Container("C1000");
+        c1000.setAutoReorder(true);
+        c1000.moveTo(100, 500);
+        paper.addNode(c1000);
+
+        var c1000_quaive = new qxjoint.node.Window('Quaive');
+        c1000.addNode(c1000_quaive);
+
+        var c1001 = new qxjoint.widget.Container("C1001");
+        c1001.setAutoReorder(true);
+        c1001.moveTo(600, 500);
+        paper.addNode(c1001);
+
+        var c1001_quaive = new qxjoint.node.Window('Quaive');
+        c1001.addNode(c1001_quaive);
+
+        var link1 = new joint.dia.Link({
+            source: { id: dns.getJointNode().id },
+            target: { id: router.getJointNode().id }
         });
-        paper.getJointGraph().addCell(link);
+
+        var link2 = new joint.dia.Link({
+            source: { id: router.getJointNode().id },
+            target: { id: c1003_plone.getJointNode().id }
+        });
+
+        var link_nginx = new joint.dia.Link({
+            source: { id: router.getJointNode().id },
+            target: { id: c1002_nignx.getJointNode().id }
+        });
+
+        var link_varnish = new joint.dia.Link({
+            source: { id: c1002_nignx.getJointNode().id },
+            target: { id: c1002_varnish.getJointNode().id }
+        });
+
+        var link_haproxy = new joint.dia.Link({
+            source: { id: c1002_varnish.getJointNode().id },
+            target: { id: c1002_haproxy.getJointNode().id }
+        });
+
+        var link_quaive1 = new joint.dia.Link({
+            source: { id: c1002_haproxy.getJointNode().id },
+            target: { id: c1000_quaive.getJointNode().id }
+        });
+
+        var link_quaive2 = new joint.dia.Link({
+            source: { id: c1002_haproxy.getJointNode().id },
+            target: { id: c1001_quaive.getJointNode().id }
+        });
+
+        paper.getJointGraph().addCells([
+          link1, link2,
+          link_nginx, link_varnish,
+          link_quaive1, link_quaive2
+        ]);
       }, this);
 
       main_container.add(paper,

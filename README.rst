@@ -6,6 +6,12 @@ This package will integrate `JointJS`_ with `qooxdoo`_.
 .. _JointJS: http://www.jointjs.com/
 .. _qooxdoo: http://www.qooxdoo.org/
 
+Todos
+-----
+
+- Auto resize the MiniMap.
+- Add links.
+
 Install
 -------
 

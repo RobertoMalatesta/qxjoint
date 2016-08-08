@@ -1,4 +1,9 @@
 /**
+ * A qx.ui.window.Window hides a joint.shapes.basic.Rect under it.
+ *
+ * All the qxjoint.node.MNode API methods are useless here, use
+ * the qx.ui.window.Window.
+ *
  * @asset(qxjoint/*)
  * @ignore(joint.shapes.basic.Rect)
  */
@@ -19,13 +24,13 @@ qx.Class.define("qxjoint.node.Window",
       this.initSize({width: 100, height: 30, opt: {}});
       this.initPosition({x: 100, y: 60, opts: {}});
 
-      this.addListenerOnce('appear',function(e){
+      this.addListenerOnce("appear",function(e){
         var bounds = this.getBounds();
         this.setSize({width: bounds.width, height: bounds.height, opt: {}});
-        this.setPosition({x: bounds.left, y: bounds.top, opts: {}});
+        this.onPointerMove();
       }, this);
 
-      this.addListenerOnce('close', function(e){
+      this.addListenerOnce("close", function(e){
         this.dispose();
       }, this);
   },
@@ -36,7 +41,7 @@ qx.Class.define("qxjoint.node.Window",
           position: this.getPosition(),
           size: this.getSize(),
           attrs: {
-            rect: { fill: "blue", rx: 4, ry: 4, stroke: { 'stroke-width': 0 } },
+            rect: { fill: "blue", rx: 4, ry: 4, stroke: { 'stroke-width': 0 }, magnet: true },
             text: { text: this.getCaption(), fill: "white" }
           }
       });
@@ -49,6 +54,35 @@ qx.Class.define("qxjoint.node.Window",
       return jointNode;
     },
 
+    _applyPaper : function(value) {
+      if (this.getContentElement()) {
+        this.fireNonBubblingEvent("pointermove");
+      } else {
+        this.addListenerOnce("appear",function(e){
+          this.fireNonBubblingEvent("pointermove", qx.event.type.Pointer, e);
+        }, this);
+      }
+    },
+
+    onPointerMove : function() {
+      var domEl = this.getContentElement().getDomElement();
+      var paperEl = this.getPaper().getContentElement().getDomElement();
+
+      if (domEl && paperEl)
+      {
+        var myRect = domEl.getBoundingClientRect(),
+            paperRect = paperEl.getBoundingClientRect(),
+            left = myRect.left - paperRect.left - 1,
+            top = myRect.top - paperRect.top - 1;
+
+        this.setPosition({
+          x: left,
+          y: top,
+          opts: {}
+        });
+      }
+    },
+
     /**
      * Overwriting qx.ui.core.MMovable._onPointerMove here to set
      * the position of the jointJS element.
@@ -59,15 +93,7 @@ qx.Class.define("qxjoint.node.Window",
     _onMovePointerMove : function(e) {
       this.base(arguments, e);
 
-      var domEl = this.getContentElement().getDomElement();
-      if (domEl)
-      {
-        this.setPosition({
-          x: parseInt(domEl.style.left, 10),
-          y: parseInt(domEl.style.top, 10),
-          opts: {}
-        });
-      }
+      this.onPointerMove();
     }
   }
 });

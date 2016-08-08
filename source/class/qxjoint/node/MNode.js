@@ -21,7 +21,14 @@ qx.Mixin.define("qxjoint.node.MNode",
       jointNode :
       {
         event: "change:node",
-        nullable: true
+        nullable : true
+      },
+
+      paper :
+      {
+          check : "qxjoint.widget.Paper",
+          nullable : true,
+          apply: "__applyPaper"
       }
   },
 
@@ -106,6 +113,12 @@ qx.Mixin.define("qxjoint.node.MNode",
             opts = value.opts || {};
 
         this.getJointNode().resize(width, height, opts);
+      }
+    },
+
+    __applyPaper : function(value) {
+      if (this._applyPaper) {
+        this._applyPaper(value);
       }
     }
   }

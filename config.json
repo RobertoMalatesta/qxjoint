@@ -58,10 +58,10 @@
   {
     "qxjoint-resources": {
       "add-script": [
-        {"uri": "resource/qxjoint/js/jquery.min.js"},
-        {"uri": "resource/qxjoint/js/lodash.min.js"},
-        {"uri": "resource/qxjoint/js/backbone-min.js"},
-        {"uri": "resource/qxjoint/js/joint.min.js"}
+        {"uri": "resource/qxjoint/js/jquery.js"},
+        {"uri": "resource/qxjoint/js/lodash.js"},
+        {"uri": "resource/qxjoint/js/backbone.js"},
+        {"uri": "resource/qxjoint/js/joint.js"}
       ],
       "add-css": [
         {"uri": "resource/qxjoint/css/joint.min.css"}
