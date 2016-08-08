@@ -44,6 +44,20 @@ qx.Class.define("qxjoint.widget.Paper", {
       __cssId : null,
       __htmlWidget : null,
 
+      _showLinks : false,
+
+      isShowLinks : function() {
+        return this._showLinks;
+      },
+
+      toggleShowLinks : function() {
+        this._showLinks = !this._showLinks
+
+        this.getWindows().forEach(function(win){
+          win.set({zIndex: this._showLinks ? 9 : 10});
+        }, this);
+      },
+
       _applyGraph : function(value) {
         // Clear existing papers
         if (this.getJointGraph()) {

@@ -12,6 +12,8 @@
  * This is the main application class of your custom application "qxjoint"
  *
  * @asset(qxjoint/*)
+ * @asset(qx/icon/${qx.icontheme}/22/actions/document-new.png)
+ * @asset(qx/icon/${qx.icontheme}/22/actions/edit-copy.png)
  * @ignore(joint.*)
  */
 qx.Class.define("qxjoint.Application",
@@ -44,9 +46,7 @@ qx.Class.define("qxjoint.Application",
       layout.setSpacing(5);
       main_container.setLayout(layout);
 
-      var paper = new qxjoint.widget.Paper().set({
-        decorator : "main"
-      });
+      var paper = new qxjoint.widget.Paper();
       paper.setLinkPinning(false);
 
       // Logo
@@ -92,14 +92,14 @@ qx.Class.define("qxjoint.Application",
         colSpan: 2
       });
 
-      // Left column
+      // Left content column
       var leftColumn = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
         width : 200,
         decorator : "main"
       });
       crow.add(leftColumn, 0);
 
-      // Nav paper
+      // Minimap
       var minimap = new qxjoint.widget.Minimap().set({
         decorator : "main",
         width: 200,
@@ -108,8 +108,36 @@ qx.Class.define("qxjoint.Application",
       minimap.setPaper(paper);
       leftColumn.add(minimap);
 
-      // Main content
 
+      // Right content column
+      var paper_container = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
+        decorator : "main"
+      });
+      crow.add(paper_container, 1);
+
+      //
+      var paper_toolbar = new qx.ui.toolbar.ToolBar();
+      paper_container.add(paper_toolbar);
+      //
+      var part1 = new qx.ui.toolbar.Part();
+      var tb_btn_containers = new qx.ui.toolbar.RadioButton("Containers", "icon/22/actions/document-new.png");
+      var tb_btn_links = new qx.ui.toolbar.RadioButton("Links", "icon/22/actions/edit-copy.png");
+      var radioGroup = new qx.ui.form.RadioGroup(tb_btn_containers, tb_btn_links);
+      part1.add(tb_btn_containers);
+      part1.add(tb_btn_links);
+      paper_toolbar.add(part1)
+      paper_container.add(paper, {flex: 1});
+
+      // Toolbar commands
+      var toggle_links_cmd = new qx.ui.command.Command("Ctrl+F1")
+      toggle_links_cmd.addListener("execute", function(e) {
+        paper.toggleShowLinks();
+      }, this);
+      radioGroup.addListener("changeSelection", function(e) {
+        paper.toggleShowLinks();
+      }, this);
+
+      // Main content
       paper.addListener("change:jointPaper", function(e) {
         var dns = new qxjoint.node.Window("DNS")
         dns.moveTo(100, 100);
@@ -192,12 +220,10 @@ qx.Class.define("qxjoint.Application",
 
         paper.getJointGraph().addCells([
           link1, link2,
-          link_nginx, link_varnish,
+          link_nginx, link_varnish, link_haproxy,
           link_quaive1, link_quaive2
         ]);
       }, this);
-
-      crow.add(paper, 1);
 
       main_container.getChildren()[0].setWidth(200);
       main_container.getChildren()[2].setWidth(200);
