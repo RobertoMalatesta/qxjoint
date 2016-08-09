@@ -95,6 +95,7 @@ qx.Class.define("qxjoint.widget.Minimap",
      var action = qx.lang.Function.bind(function() {
          var el = this.getContentElement().getDomElement();
          qx.bom.element.Attribute.set(el,'id', this._cssId);
+         el.style["pointer-events"] = 'none';
 
          var bounds = this.getBounds();
          var paper = new joint.dia.Paper({
