@@ -7,11 +7,9 @@ var ID = 0;
 qx.Class.define("qxjoint.widget.Minimap",
 {
   extend : qx.ui.core.Widget,
-  include : [qx.ui.core.MNativeOverflow],
 
   construct : function() {
     this.base(arguments);
-    this.setOverflow("auto", "auto");
 
     ID++;
     this.__cssId = "#qxjointmm-"+ID;
@@ -28,13 +26,15 @@ qx.Class.define("qxjoint.widget.Minimap",
    },
 
    paper: {
+     check : "qxjoint.widget.Paper",
      event: "change:paper",
      nullable: true,
      apply: "_applyPaper"
    },
 
    scalePadding: {
-     init: 5
+     check: "Integer",
+     init: 10
    }
   },
 
@@ -49,7 +49,7 @@ qx.Class.define("qxjoint.widget.Minimap",
     var action = qx.lang.Function.bind(function() {
       var jPaper = this.getJointPaper();
       var bounds = this.getBounds();
-      jPaper.setDimensions(bounds.width - 12, bounds.height - 12);
+      jPaper.setDimensions(bounds.width - 10, bounds.height - 10);
       jPaper.scaleContentToFit(opts);
     }, this);
 
