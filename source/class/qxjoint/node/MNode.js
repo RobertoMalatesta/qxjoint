@@ -41,12 +41,16 @@ qx.Mixin.define("qxjoint.node.MNode",
         this._dontApplyPosition = true;
         this.setPosition(element.get('position'));
         this._dontApplyPosition = false;
+
+        this.getPaper().fireNonBubblingEvent("change:jointNodes");
       }, this);
 
       node.on('change:size', function(element) {
         this._dontApplySize = true;
         this.setSize(element.get('size'));
         this._dontApplySize = false;
+
+        this.getPaper().fireNonBubblingEvent("change:jointNodes");
       }, this);
 
       this.setJointNode(node);

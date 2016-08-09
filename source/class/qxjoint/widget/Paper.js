@@ -28,6 +28,10 @@ qx.Class.define("qxjoint.widget.Paper", {
       }, this);
     },
 
+    events : {
+      "change:jointNodes": "qx.event.type.Event"
+    },
+
     properties: {
       jointPaper: {
         event: "change:jointPaper",

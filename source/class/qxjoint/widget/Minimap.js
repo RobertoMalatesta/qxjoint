@@ -19,12 +19,6 @@ qx.Class.define("qxjoint.widget.Minimap",
     this.addListener("resize", function(e) {
       this.scaleContentToFit();
     }, this);
-
-    // TODO: Replace with on change events
-    var timer = qx.util.TimerManager.getInstance();
-    timer.start(function(userData, timerId) {
-      this.scaleContentToFit();
-    }, 1000, this, null, 1000)
   },
 
   properties : {
@@ -84,9 +78,17 @@ qx.Class.define("qxjoint.widget.Minimap",
      }
    },
 
+   _onPaperChangeJointNodes : function(e) {
+     this.scaleContentToFit();
+   },
+
    _applyPaper : function(value) {
      // Clear existing papers
      if (this.getJointPaper()) {
+       this.getPaper().removeListener(
+         "change:jointNodes",
+         this._onPaperChangeJointNodes
+       );
        this.removeAll();
      }
 
@@ -105,6 +107,12 @@ qx.Class.define("qxjoint.widget.Minimap",
              async: true
          });
          this.setJointPaper(paper);
+
+         value.addListener(
+           "change:jointNodes",
+           this._onPaperChangeJointNodes,
+           this
+         );
      }, this);
 
     if (value.getJointGraph()) {
