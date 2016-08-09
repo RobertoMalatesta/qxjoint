@@ -20,12 +20,11 @@ qx.Class.define("qxjoint.widget.Minimap",
       this.scaleContentToFit();
     }, this);
 
-    // Scale the map every second.
-    var timer = new qx.event.Timer(1000);
-    timer.addListener("interval", function(e) {
+    // TODO: Replace with on change events
+    var timer = qx.util.TimerManager.getInstance();
+    timer.start(function(userData, timerId) {
       this.scaleContentToFit();
-    }, this);
-    timer.start();
+    }, 1000, this, null, 1000)
   },
 
   properties : {
