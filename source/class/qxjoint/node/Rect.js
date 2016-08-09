@@ -13,20 +13,54 @@ qx.Class.define("qxjoint.node.Rect",
 
       this.initSize({width: 100, height: 30, opt: {}});
       this.initPosition({x: 100, y: 60, opts: {}});
+
+
+      this.addListener("changeBackgroundColor", function(e){
+        var jNode = this.getJointNode();
+        if (!jNode || !this.getBackgroundColor()) {
+          return;
+        }
+        jNode.attr(
+          'rect/fill',
+          qx.util.ColorUtil.stringToRgbString(this.getBackgroundColor())
+        );
+      }, this);
+
+      this.addListener("changeTextColor", function(e){
+        var jNode = this.getJointNode();
+        if (!jNode || !this.getTextColor()) {
+          return;
+        }
+        jNode.attr(
+          'text/fill',
+          qx.util.ColorUtil.stringToRgbString(this.getTextColor())
+        );
+      }, this);
+
+      this.addListener("changeCaption", function(e){
+        var jNode = this.getJointNode();
+        if (!jNode) {
+          return;
+        }
+        jNode.attr('text/text', this.getCaption());
+      }, this);
   },
 
 
   properties : {
     backgroundColor :
     {
+      event: "changeBackgroundColor",
       init: "blue"
     },
-    text :
+    caption :
     {
+      event: "changeCaption",
       init: "new node"
     },
     textColor :
     {
+      event: "changeTextColor",
       init: "white"
     }
   },
@@ -37,10 +71,29 @@ qx.Class.define("qxjoint.node.Rect",
           position: this.getPosition(),
           size: this.getSize(),
           attrs: {
-            rect: { fill: this.getBackgroundColor() },
-            text: { text: this.getText(), fill: this.getTextColor() }
+            rect: {
+              fill: qx.util.ColorUtil.stringToRgbString(
+                this.getBackgroundColor()
+              ),
+              rx: 4, ry: 4,
+              stroke: { 'stroke-width': 0 },
+              magnet: true
+            },
+            text: {
+              text: this.getCaption(),
+              fill: qx.util.ColorUtil.stringToRgbString(
+                this.getTextColor()
+              )
+            }
           }
       });
+    },
+
+    destroy : function()
+    {
+      this.base(arguments);
+
+      this.destroyJointNode();
     }
   }
 });

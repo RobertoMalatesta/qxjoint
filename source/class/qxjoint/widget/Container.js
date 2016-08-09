@@ -97,9 +97,22 @@ qx.Class.define("qxjoint.widget.Container",
      var cbHeight = childs[0].getChildControl("captionbar").getBounds().height;
      var wm = length / 2 > 1 ? 2 : 1;
      var hm = Math.round(length / 2 / 2) + 1;
-     this.getCap
      this.setWidth((wm * width + (wm * spacing)) + spacing + 3)
      this.setHeight((hm * height + (hm * spacing)) + spacing + cbHeight + 3)
+
+     // Wait on second then try to rearange the underlying JointJS nodes.
+     var timer = qx.util.TimerManager.getInstance();
+     timer.start(function(userData, timerId)
+       {
+         childs.forEach(function(child) {
+           child.onPointerMove();
+         });
+       },
+       0,
+       this,
+       null,
+       1000
+     );
    },
 
    // Overriden

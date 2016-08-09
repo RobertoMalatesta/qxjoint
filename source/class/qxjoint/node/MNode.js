@@ -84,10 +84,12 @@ qx.Mixin.define("qxjoint.node.MNode",
       return this
     },
 
-    dispose : function () {
+    destroyJointNode : function () {
       if (this.getJointNode() != null) {
         this.getJointNode().remove();
       }
+
+      this.getPaper().fireNonBubblingEvent("change:jointNodes");
     },
 
     _dontApplyPosition : false,

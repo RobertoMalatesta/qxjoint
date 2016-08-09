@@ -93,7 +93,9 @@ qx.Class.define("qxjoint.Application",
       });
 
       // Left content column
-      var leftColumn = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
+      var leftColumnLayout = new qx.ui.layout.VBox();
+      leftColumnLayout.setSpacing(10);
+      var leftColumn = new qx.ui.container.Composite(leftColumnLayout).set({
         width : 200,
         decorator : "main"
       });
@@ -108,6 +110,18 @@ qx.Class.define("qxjoint.Application",
       minimap.setPaper(paper);
       leftColumn.add(minimap);
 
+      // Add buttons
+      var abContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox());
+      leftColumn.add(abContainer);
+
+      var bAddNode = new qx.ui.form.Button("Add Node");
+      bAddNode.addListener("execute", function(e) {
+        var node = new qxjoint.node.Window("Node")
+        node.moveTo(10, 10);
+        paper.addNode(node);
+      }, this);
+      abContainer.add(bAddNode);
+
 
       // Right content column
       var paper_container = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
@@ -120,7 +134,7 @@ qx.Class.define("qxjoint.Application",
       paper_container.add(paper_toolbar);
       //
       var part1 = new qx.ui.toolbar.Part();
-      var tb_btn_containers = new qx.ui.toolbar.RadioButton("Containers", "icon/22/actions/document-new.png");
+      var tb_btn_containers = new qx.ui.toolbar.RadioButton("Nodes", "icon/22/actions/document-new.png");
       var tb_btn_links = new qx.ui.toolbar.RadioButton("Links", "icon/22/actions/edit-copy.png");
       var radioGroup = new qx.ui.form.RadioGroup(tb_btn_containers, tb_btn_links);
       part1.add(tb_btn_containers);
@@ -129,21 +143,17 @@ qx.Class.define("qxjoint.Application",
       paper_container.add(paper, {flex: 1});
 
       // Toolbar commands
-      var toggle_links_cmd = new qx.ui.command.Command("Ctrl+F1")
-      toggle_links_cmd.addListener("execute", function(e) {
-        paper.toggleShowLinks();
-      }, this);
       radioGroup.addListener("changeSelection", function(e) {
         paper.toggleShowLinks();
       }, this);
 
       // Main content
       paper.addListener("change:jointPaper", function(e) {
-        var dns = new qxjoint.node.Window("DNS")
+        var dns = new qxjoint.node.Window("DNS Service")
         dns.moveTo(100, 100);
         paper.addNode(dns);
 
-        var router = new qxjoint.node.Window("Router")
+        var router = new qxjoint.node.Window("Router Service")
         router.moveTo(300, 100);
         paper.addNode(router);
 
