@@ -8,10 +8,8 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.Decoration",
+qx.Theme.define("qxjoint.theme.qxjoint.Decoration",
 {
-  extend : qx.theme.indigo.Decoration,
-
   decorations :
   {
     "qxjoint-node-window" :
@@ -33,7 +31,7 @@ qx.Theme.define("qxjoint.theme.Decoration",
       {
         shadowColor : "light-blue",
         innerColor: "light-blue"
-      }      
+      }
     }
   }
 });

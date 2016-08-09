@@ -42,7 +42,7 @@
   {
     "APPLICATION"  : "qxjoint",
     "QOOXDOO_PATH" : "../qooxdoo",
-    "QXTHEME"      : "qxjoint.theme.Theme",
+    "QXTHEME"      : "qxjoint.theme.demo.Theme",
     "API_EXCLUDE"  : ["qx.test.*", "${APPLICATION}.theme.*", "${APPLICATION}.test.*"],
     "LOCALES"      : [ "en" ],
     "CACHE"        : "${TMPDIR}/qx${QOOXDOO_VERSION}/cache",

@@ -8,12 +8,8 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.Color",
+qx.Theme.define("qxjoint.theme.demo.Color",
 {
   extend : qx.theme.indigo.Color,
-
-  colors :
-  {
-    "light-blue": "#ADDFFF"
-  }
+  include : [ qxjoint.theme.qxjoint.Color ]
 });

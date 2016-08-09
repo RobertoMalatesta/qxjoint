@@ -8,14 +8,14 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.Theme",
+qx.Theme.define("qxjoint.theme.demo.Theme",
 {
   meta :
   {
-    color : qxjoint.theme.Color,
-    decoration : qxjoint.theme.Decoration,
-    font : qxjoint.theme.Font,
+    color : qxjoint.theme.demo.Color,
+    decoration : qxjoint.theme.demo.Decoration,
+    font : qxjoint.theme.demo.Font,
     icon : qx.theme.icon.Tango,
-    appearance : qxjoint.theme.Appearance
+    appearance : qxjoint.theme.demo.Appearance
   }
 });

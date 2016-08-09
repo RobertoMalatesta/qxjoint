@@ -61,7 +61,7 @@ qx.Class.define("qxjoint.node.Window",
           return;
         }
         jNode.attr('text/text', this.getCaption());
-      }, this);      
+      }, this);
   },
 
   members : {

@@ -8,10 +8,8 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.Appearance",
+qx.Theme.define("qxjoint.theme.qxjoint.Appearance",
 {
-  extend : qx.theme.indigo.Appearance,
-
   appearances :
   {
     "qxjoint-node-window" :

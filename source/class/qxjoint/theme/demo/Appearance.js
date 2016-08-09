@@ -8,11 +8,8 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.Font",
+qx.Theme.define("qxjoint.theme.demo.Appearance",
 {
-  extend : qx.theme.indigo.Font,
-
-  fonts :
-  {
-  }
+  extend : qx.theme.indigo.Appearance,
+  include : [ qxjoint.theme.qxjoint.Appearance ]
 });
