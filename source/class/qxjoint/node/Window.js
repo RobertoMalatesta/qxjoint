@@ -113,8 +113,8 @@ qx.Class.define("qxjoint.node.Window",
       {
         var myRect = domEl.getBoundingClientRect(),
             paperRect = paperEl.getBoundingClientRect(),
-            left = myRect.left - paperRect.left,
-            top = myRect.top - paperRect.top;
+            left = myRect.left - paperRect.left + paperEl.scrollLeft,
+            top = myRect.top - paperRect.top + paperEl.scrollTop;
 
         this.setPosition({
           x: left,

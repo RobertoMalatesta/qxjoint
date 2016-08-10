@@ -12,10 +12,13 @@ var ID = 0;
 qx.Class.define("qxjoint.widget.Paper", {
     extend : qx.ui.window.Desktop,
 
-    include : [qxjoint.MGraph],
+    include : [qxjoint.MGraph, qx.ui.core.MNativeOverflow],
 
     construct : function() {
       this.base(arguments);
+
+      this.setOverflow("scroll", "scroll");
+      this.getContentElement().enableScrolling();
 
       ID++;
       this.__cssId = '#qxjoint-'+ID;
@@ -25,6 +28,18 @@ qx.Class.define("qxjoint.widget.Paper", {
       // setGraph though.
       this.addListenerOnce('appear', function(e) {
         this.setJointGraph(new joint.dia.Graph);
+      }, this);
+
+      this.set({backgroundColor: "rgba(255,255,255,0.0)"});
+
+      this.addListener("change:jointNodes", function(e) {
+        var jPaper = this.getJointPaper();
+        if (!jPaper) {
+          return;
+        }
+        jPaper.fitToContent();
+        this.__htmlWidget.setWidth(jPaper.options.width);
+        this.__htmlWidget.setHeight(jPaper.options.height);
       }, this);
     },
 
@@ -68,7 +83,7 @@ qx.Class.define("qxjoint.widget.Paper", {
           this.removeAll();
         }
 
-        var widget = new qx.ui.embed.Html();
+        var widget = new qxjoint.widget.EmbedHtml();
         var bounds = this.getBounds();
         widget.setUserBounds(0, 0, bounds.width, bounds.height)
         this.add(widget);
@@ -86,7 +101,6 @@ qx.Class.define("qxjoint.widget.Paper", {
                 width: this.__htmlWidget.getBounds().width,
                 height: this.__htmlWidget.getBounds().height,
                 model: value,
-                gridSize: 1,
                 linkPinning: false,
                 async: true
             });
