@@ -14,3 +14,6 @@ source/resource/qxjoint/js/jquery.js
 source/resource/qxjoint/js/backbone.js
 source/resource/qxjoint/js/lodash.js
 source/resource/qxjoint/js/joint.js
+
+# Github pages in same folder :)
+gh-pages/
