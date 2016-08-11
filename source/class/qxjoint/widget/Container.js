@@ -4,8 +4,8 @@
 qx.Class.define("qxjoint.widget.Container",
 {
   extend : qx.ui.window.Window,
-  include : [
-    qxjoint.widget.MMoving
+  implement : [
+    qxjoint.widget.IMoving
   ],
 
   construct : function(caption, icon) {

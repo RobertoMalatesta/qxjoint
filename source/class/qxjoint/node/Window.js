@@ -12,8 +12,10 @@ qx.Class.define("qxjoint.node.Window",
   extend : qx.ui.window.Window,
   include : [
     qxjoint.node.MJointNode,
-    qxjoint.node.MNode,
-    qxjoint.widget.MMoving
+    qxjoint.node.MNode
+  ],
+  implement: [
+    qxjoint.widget.IMoving
   ],
 
   construct : function(caption, icon) {
