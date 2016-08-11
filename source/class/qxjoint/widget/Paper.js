@@ -12,12 +12,12 @@ var ID = 0;
 qx.Class.define("qxjoint.widget.Paper", {
     extend : qx.ui.window.Desktop,
 
-    include : [qxjoint.MGraph, qx.ui.core.MNativeOverflow],
+    include : [qxjoint.MGraph, qxjoint.widget.MPanable],
 
     construct : function() {
       this.base(arguments);
 
-      this.setOverflow("scroll", "scroll");
+      this.setOverflow("auto", "auto");
       this.getContentElement().enableScrolling();
 
       ID++;
@@ -33,13 +33,7 @@ qx.Class.define("qxjoint.widget.Paper", {
       this.set({backgroundColor: "rgba(255,255,255,0.0)"});
 
       this.addListener("change:jointNodes", function(e) {
-        var jPaper = this.getJointPaper();
-        if (!jPaper) {
-          return;
-        }
-        jPaper.fitToContent();
-        this.__htmlWidget.setWidth(jPaper.options.width);
-        this.__htmlWidget.setHeight(jPaper.options.height);
+        this.onNodeMove(e);
       }, this);
     },
 
@@ -83,10 +77,13 @@ qx.Class.define("qxjoint.widget.Paper", {
           this.removeAll();
         }
 
-        var widget = new qxjoint.widget.EmbedHtml();
+        var widget = new qx.ui.embed.Html();
         var bounds = this.getBounds();
         widget.setUserBounds(0, 0, bounds.width, bounds.height)
         this.add(widget);
+
+        this._activatePanHandle(widget);
+        this.setPanForceMiddleMouse(true);
 
         this.__htmlWidget = widget;
 
@@ -124,9 +121,28 @@ qx.Class.define("qxjoint.widget.Paper", {
           node.show();
         }
 
+        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.node.MMoving)) {
+          node.addListener("moving", this.onNodeMove, this);
+        }
+
         if (qx.Class.hasOwnMixin(node.constructor, qxjoint.MGraph)) {
           node.setJointGraph(this.getJointGraph());
         }
+      },
+
+      onNodeMove : function(e) {
+        var jPaper = this.getJointPaper();
+        if (!jPaper) {
+          return;
+        }
+        jPaper.fitToContent();
+        this.__htmlWidget.setUserBounds(0, 0, jPaper.options.width, jPaper.options.height);
+      },
+
+      destruct : function() {
+        this.base(arguments);
+
+        this._deactivatePaneHandle();
       }
     }
 });

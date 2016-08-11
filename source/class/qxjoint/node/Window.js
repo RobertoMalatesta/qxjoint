@@ -10,7 +10,7 @@
 qx.Class.define("qxjoint.node.Window",
 {
   extend : qx.ui.window.Window,
-  include : [qxjoint.node.MNode],
+  include : [qxjoint.node.MNode, qxjoint.node.MMoving],
 
   construct : function(caption, icon) {
       this.base(arguments, caption, icon);
@@ -106,8 +106,9 @@ qx.Class.define("qxjoint.node.Window",
     },
 
     onPointerMove : function(e) {
-      var domEl = this.getContentElement().getDomElement();
+      // Move the JointJS node below.
       var paperEl = this.getPaper().getContentElement().getDomElement();
+      var domEl = this.getContentElement().getDomElement();
 
       if (domEl && paperEl)
       {
@@ -137,9 +138,15 @@ qx.Class.define("qxjoint.node.Window",
      *   this.setUseMoveFrame(false);
      */
     _onMovePointerMove : function(e) {
+      // Only react when dragging is active
+      if (!this.hasState("move")) {
+        return;
+      }
+
       this.base(arguments, e);
 
       this.onPointerMove(e);
+      this.fireEvent("moving");
     },
 
     destroy : function()

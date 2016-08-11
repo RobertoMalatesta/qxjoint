@@ -4,7 +4,7 @@
 qx.Class.define("qxjoint.widget.Container",
 {
   extend : qx.ui.window.Window,
-  include : [qxjoint.MGraph],
+  include : [qxjoint.MGraph, qxjoint.node.MMoving],
 
   construct : function(caption, icon) {
     this.base(arguments, caption, icon);
@@ -42,34 +42,36 @@ qx.Class.define("qxjoint.widget.Container",
     _addNode : function(node) {
       if (!this.__desktop) {
          this.__desktop = new qx.ui.window.Desktop(
-           this.getPaper().getWindowManager()
          );
          this.add(this.__desktop);
       }
 
-       if (qx.core.Environment.get("qx.debug")) {
-         this.assertInstance(node, qxjoint.node.Window);
-       }
+      if (qx.core.Environment.get("qx.debug")) {
+        this.assertInstance(node, qxjoint.node.Window);
+      }
 
        node.setPaper(this.getLayoutParent());
        node.set({opacity: 1.0})
-       var desktop = this.getChildren()[0];
-       desktop.add(node);
-       desktop.getWindows()[0].addListenerOnce(
+       node.addListenerOnce(
          "appear",
          this.updateBoundsAndContentsAlignment,
          this
        );
+
+       this.__desktop.add(node);
        var spacing = this.getAutoReorderSpacing();
        node.moveTo(spacing, spacing);
        node.show();
    },
 
+   getNodes : function() {
+     return this.__desktop.getWindows();
+   },
+
    updateBoundsAndContentsAlignment : function(e) {
      var spacing = this.getAutoReorderSpacing();
      if (this.getAutoReorder()) {
-       var desktop = this.getChildren()[0];
-       var childs = desktop.getWindows();
+       var childs = this.getNodes();
 
        var child0Bounds = childs[0].getBounds();
        var width = child0Bounds.width;
@@ -117,15 +119,28 @@ qx.Class.define("qxjoint.widget.Container",
 
    // Overriden
    close : function() {
-     this.destroy();
+     var nodes = this.getNodes().slice();
+     nodes.forEach(function(child) {
+       this.debug(child.getCaption());
+       child.destroy();
+     }, this);
+
+     this.dispose();
    },
 
    _onMovePointerMove : function(e) {
      this.base(arguments, e);
 
-     this.getChildren()[0].getChildren().forEach(function(child) {
+     // Only react when dragging is active
+     if (!this.hasState("move")) {
+       return;
+     }
+
+     this.getNodes().forEach(function(child) {
        child.onPointerMove();
      });
+
+     this.fireEvent("moving");
    }
   }
 });
