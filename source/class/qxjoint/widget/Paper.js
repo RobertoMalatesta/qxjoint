@@ -136,7 +136,13 @@ qx.Class.define("qxjoint.widget.Paper", {
           return;
         }
         jPaper.fitToContent();
-        this.__htmlWidget.setUserBounds(0, 0, jPaper.options.width, jPaper.options.height);
+        var minBounds = this.getBounds();
+        // 15 = No scrollbar.
+        this.__htmlWidget.setUserBounds(
+          0, 0,
+          Math.max(minBounds.width - 15, jPaper.options.width),
+          Math.max(minBounds.height - 15, jPaper.options.height)
+        );
       },
 
       destruct : function() {
