@@ -190,7 +190,7 @@ qx.Class.define("qxjoint.Application",
         c1001.moveTo(600, 500);
         paper.addNode(c1001);
 
-        var c1001_quaive = new qxjoint.node.Window('Quaive');
+        var c1001_quaive = new qxjoint.node.Window('AlwaysActive');
         c1001.addNode(c1001_quaive);
 
         var link1 = new joint.dia.Link({

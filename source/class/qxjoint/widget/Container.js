@@ -4,7 +4,9 @@
 qx.Class.define("qxjoint.widget.Container",
 {
   extend : qx.ui.window.Window,
-  include : [qxjoint.MGraph, qxjoint.node.MMoving],
+  include : [
+    qxjoint.widget.MMoving
+  ],
 
   construct : function(caption, icon) {
     this.base(arguments, caption, icon);
@@ -27,7 +29,7 @@ qx.Class.define("qxjoint.widget.Container",
 
     paper :
     {
-      check : "qxjoint.widget.Paper"
+        check : "qxjoint.widget.Paper"
     }
   },
 
@@ -39,9 +41,10 @@ qx.Class.define("qxjoint.widget.Container",
       *
       * gets called by qxjoint.MGraphHolder.addNode()
       */
-    _addNode : function(node) {
+    addNode : function(node) {
       if (!this.__desktop) {
          this.__desktop = new qx.ui.window.Desktop(
+           this.getPaper().getWindowManager()
          );
          this.add(this.__desktop);
       }
@@ -50,7 +53,8 @@ qx.Class.define("qxjoint.widget.Container",
         this.assertInstance(node, qxjoint.node.Window);
       }
 
-       node.setPaper(this.getLayoutParent());
+       this.getPaper().addJointNode(node);
+       node.setPaper(this.getPaper());
        node.set({opacity: 1.0})
        node.addListenerOnce(
          "appear",

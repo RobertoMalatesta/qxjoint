@@ -1,7 +1,7 @@
 /**
  * A qx.ui.window.Window hides a joint.shapes.basic.Rect under it.
  *
- * All the qxjoint.node.MNode API methods are useless here, use
+ * All the qxjoint.node.MJointNode API methods are useless here, use
  * the qx.ui.window.Window.
  *
  * @asset(qxjoint/*)
@@ -10,7 +10,11 @@
 qx.Class.define("qxjoint.node.Window",
 {
   extend : qx.ui.window.Window,
-  include : [qxjoint.node.MNode, qxjoint.node.MMoving],
+  include : [
+    qxjoint.node.MJointNode,
+    qxjoint.node.MNode,
+    qxjoint.widget.MMoving
+  ],
 
   construct : function(caption, icon) {
       this.base(arguments, caption, icon);
@@ -24,12 +28,12 @@ qx.Class.define("qxjoint.node.Window",
       this.setAppearance("qxjoint-node-window");
 
       // JointJS Size/Position will get changed.
-      this.initSize({width: 100, height: 30, opt: {}});
-      this.initPosition({x: 100, y: 60, opts: {}});
+      this.initJointSize({width: 100, height: 30, opt: {}});
+      this.initJointPosition({x: 100, y: 60, opts: {}});
 
       this.addListenerOnce("appear",function(e){
         var bounds = this.getBounds();
-        this.setSize({width: bounds.width, height: bounds.height, opt: {}});
+        this.setJointSize({width: bounds.width, height: bounds.height, opt: {}});
         this.onPointerMove();
       }, this);
 
@@ -67,8 +71,8 @@ qx.Class.define("qxjoint.node.Window",
   members : {
     _makeNode : function() {
       var jointNode = new joint.shapes.basic.Rect({
-          position: this.getPosition(),
-          size: this.getSize(),
+          position: this.getJointPosition(),
+          size: this.getJointSize(),
           attrs: {
             rect: {
               fill: qx.util.ColorUtil.stringToRgbString(
@@ -89,20 +93,10 @@ qx.Class.define("qxjoint.node.Window",
 
       this.addListener('resize', function(e) {
         var bounds = e.getData();
-        this.setSize({width: bounds.width, height: bounds.height, opt: {}});
+        this.setJointSize({width: bounds.width, height: bounds.height, opt: {}});
       }, this);
 
       return jointNode;
-    },
-
-    _applyPaper : function(value) {
-      if (this.getContentElement()) {
-        this.fireNonBubblingEvent("pointermove");
-      } else {
-        this.addListenerOnce("appear",function(e){
-          this.fireNonBubblingEvent("pointermove", qx.event.type.Pointer, e);
-        }, this);
-      }
     },
 
     onPointerMove : function(e) {
@@ -117,7 +111,7 @@ qx.Class.define("qxjoint.node.Window",
             left = myRect.left - paperRect.left + paperEl.scrollLeft,
             top = myRect.top - paperRect.top + paperEl.scrollTop;
 
-        this.setPosition({
+        this.setJointPosition({
           x: left,
           y: top,
           opts: {}

@@ -5,11 +5,15 @@
 qx.Class.define("qxjoint.node.Rect",
 {
   extend : qx.core.Object,
-  include : [qxjoint.node.MNode],
+  include : [qxjoint.node.MJointNode],
 
 
-  construct : function() {
+  construct : function(caption) {
       this.base(arguments);
+
+      if (caption) {
+        this.setCaption(caption);
+      }
 
       this.initSize({width: 100, height: 30, opt: {}});
       this.initPosition({x: 100, y: 60, opts: {}});
@@ -68,8 +72,8 @@ qx.Class.define("qxjoint.node.Rect",
   members : {
     _makeNode : function() {
       return new joint.shapes.basic.Rect({
-          position: this.getPosition(),
-          size: this.getSize(),
+          position: this.getJointPosition(),
+          size: this.getJointSize(),
           attrs: {
             rect: {
               fill: qx.util.ColorUtil.stringToRgbString(

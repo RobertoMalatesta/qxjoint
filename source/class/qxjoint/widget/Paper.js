@@ -12,14 +12,18 @@ var ID = 0;
 qx.Class.define("qxjoint.widget.Paper", {
     extend : qx.ui.window.Desktop,
 
-    include : [qxjoint.MGraph, qxjoint.widget.MPanable],
+    include : [
+      qxjoint.widget.MPanable
+    ],
 
     construct : function() {
       this.base(arguments);
 
+      // Overflow / Paning
       this.setOverflow("auto", "auto");
       this.getContentElement().enableScrolling();
 
+      // ID of the widget containing the JointJS paper.
       ID++;
       this.__cssId = '#qxjoint-'+ID;
 
@@ -42,6 +46,13 @@ qx.Class.define("qxjoint.widget.Paper", {
     },
 
     properties: {
+      jointGraph:
+      {
+        event: "change:jointGraph",
+        apply: "_applyGraph",
+        nullable: true
+      },
+
       jointPaper: {
         event: "change:jointPaper",
         nullable: true
@@ -107,10 +118,12 @@ qx.Class.define("qxjoint.widget.Paper", {
 
       /**
        * Add a either a wrapped JointJS node and/or a qx.ui.core.Widget.
-       *
-       * gets called by qxjoint.MGraphHolder.addNode()
        */
-      _addNode : function(node) {
+      addNode : function(node) {
+        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.node.MJointNode)) {
+          this.addJointNode(node);
+        }
+
         if (qx.Class.hasOwnMixin(node.constructor, qxjoint.node.MNode) ||
             qx.Class.isSubClassOf(node.constructor, qxjoint.widget.Container)) {
           node.setPaper(this);
@@ -121,13 +134,29 @@ qx.Class.define("qxjoint.widget.Paper", {
           node.show();
         }
 
-        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.node.MMoving)) {
+        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.widget.MMoving)) {
           node.addListener("moving", this.onNodeMove, this);
         }
+      },
 
-        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.MGraph)) {
-          node.setJointGraph(this.getJointGraph());
-        }
+      /**
+       * Calls node.create() and adds the resulting node to the
+       * current JointJS graph, after that it listens on changes of
+       * the jointnode to update a maybe listening minimap.
+       */
+      addJointNode : function(node) {
+        node.create();
+        var jointNode = node.getJointNode();
+        jointNode.set('z', 1);
+        this.getJointGraph().addCell(jointNode);
+
+        node.addListener("change:jointPosition", function(e) {
+          this.fireNonBubblingEvent("change:jointNodes");
+        }, this);
+
+        node.addListener("change:jointSize", function(e) {
+          this.fireNonBubblingEvent("change:jointNodes");
+        }, this);
       },
 
       onNodeMove : function(e) {
