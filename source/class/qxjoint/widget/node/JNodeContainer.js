@@ -33,7 +33,7 @@
        * gets called by qxjoint.MGraphHolder.addNode()
        */
      addNode : function(node) {
-        this.getPaper().addJointNode(node);
+        this.getPaper().addJointNode(node);        
         node.setPaper(this.getPaper());
         node.set({opacity: 1.0})
         node.addListenerOnce(

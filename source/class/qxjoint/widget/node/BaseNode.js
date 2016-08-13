@@ -41,10 +41,10 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
     this._updateCaptionBar();
 
     // Activation listener
-    this.addListener("pointerdown", this._onWindowPointerDown, this, true);
+    this.addListener("pointerdown", this._onNodePointerDown, this, true);
 
     // Focusout listener
-    this.addListener("focusout", this._onWindowFocusOut, this);
+    this.addListener("focusout", this._onNodeFocusOut, this);
 
     // Automatically add to application root.
     qx.core.Init.getApplication().getRoot().add(this);
@@ -559,7 +559,7 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
      *
      * @param e {qx.event.type.Pointer} pointer down event
      */
-    _onWindowPointerDown : function(e) {
+    _onNodePointerDown : function(e) {
       this.setActive(true);
     },
 
@@ -570,7 +570,7 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
      *
      * @param e {qx.event.type.Focus} focus event
      */
-    _onWindowFocusOut : function(e) {
+    _onNodeFocusOut : function(e) {
       // get the current focused widget and check if it is a child
       var current = e.getRelatedTarget();
       if (current != null && !qx.ui.core.Widget.contains(this, current))

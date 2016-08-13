@@ -23,17 +23,6 @@ qx.Class.define("qxjoint.widget.viewport.Manager",
     },
 
 
-    // interface implementation
-    changeActiveNode: function(active, oldActive) {
-      if (active) {
-        active.setActive(true);
-      }
-      if (oldActive) {
-        oldActive.resetActive();
-      }
-    },
-
-
     /** @type {Integer} Minimum zIndex to start with for windows */
     _minZIndex : 1e5,
 
@@ -85,9 +74,6 @@ qx.Class.define("qxjoint.widget.viewport.Manager",
           active = win;
         }
       }
-
-      //set active window or null otherwise
-      // this.__viewPort.setActiveNode(active);
     }
   }
 });

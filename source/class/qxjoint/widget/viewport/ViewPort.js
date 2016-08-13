@@ -22,27 +22,6 @@ qx.Class.define("qxjoint.widget.viewport.ViewPort",
     }
   },
 
-  /*
-  *****************************************************************************
-     PROPERTIES
-  *****************************************************************************
-  */
-
-  properties :
-  {
-    /**
-     * The currently active node
-     */
-    activeNode :
-    {
-      apply : "_applyActiveNode",
-      event : "changeActiveNode",
-      init  : null,
-      nullable : true
-    }
-  },
-
-
   events:
   {
     /**
@@ -120,29 +99,8 @@ qx.Class.define("qxjoint.widget.viewport.ViewPort",
      */
     _onChangeActive : function(e)
     {
-      if (e.getData()) {
-        this.setActiveNode(e.getTarget());
-      } else if (this.getActiveNode() == e.getTarget()) {
-        this.setActiveNode(null);
-      }
-    },
-
-
-    // property apply
-    _applyActiveNode : function(value, old) {
-      this.getNodeManager().changeActiveNode(value, old);
       this.getNodeManager().updateStack();
     },
-
-
-    /**
-     * Event handler. Called if one of the managed windows changes its visibility
-     * state.
-     */
-    _onChangeVisibility : function() {
-      this.getNodeManager().updateStack();
-    },
-
 
     /**
      * Overrides the method {@link qx.ui.core.Widget#_afterAddChild}
@@ -171,7 +129,6 @@ qx.Class.define("qxjoint.widget.viewport.ViewPort",
         this.fireDataEvent("nodeAdded", node);
 
         node.addListener("changeActive", this._onChangeActive, this);
-        node.addListener("changeVisibility", this._onChangeVisibility, this);
       }
 
       if (node.getActive()) {
@@ -209,7 +166,6 @@ qx.Class.define("qxjoint.widget.viewport.ViewPort",
         this.fireDataEvent("nodeRemoved", node);
 
         node.removeListener("changeActive", this._onChangeActive, this);
-        node.removeListener("changeVisibility", this._onChangeVisibility, this);
 
         this.getNodeManager().updateStack();
       }
