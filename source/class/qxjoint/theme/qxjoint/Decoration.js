@@ -12,7 +12,7 @@ qx.Theme.define("qxjoint.theme.qxjoint.Decoration",
 {
   decorations :
   {
-    "qxjoint-node-window" :
+    "qxjoint-node-rect" :
     {
       include: "window",
 
@@ -23,7 +23,7 @@ qx.Theme.define("qxjoint.theme.qxjoint.Decoration",
       }
     },
 
-    "qxjoint-node-window-active" :
+    "qxjoint-node-rect-active" :
     {
       include: "window-active",
 
@@ -31,6 +31,24 @@ qx.Theme.define("qxjoint.theme.qxjoint.Decoration",
       {
         shadowColor : "light-blue",
         innerColor: "light-blue"
+      }
+    },
+
+    "qxjoint-node-rect-caption" : {
+      style :
+      {
+        radius: [3, 3, 0, 0],
+        color: "window-border",
+        widthBottom: 0
+      }
+    },
+
+    "qxjoint-node-rect-caption-active" : {
+      style :
+      {
+        radius: [3, 3, 0, 0],
+        color: "highlight",
+        widthBottom: 3
       }
     }
   }

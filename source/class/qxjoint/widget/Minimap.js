@@ -1,7 +1,6 @@
 var ID = 0;
 
 /**
- * @asset(qxjoint/*)
  * @ignore(joint.*)
  */
 qx.Class.define("qxjoint.widget.Minimap",
@@ -78,17 +77,13 @@ qx.Class.define("qxjoint.widget.Minimap",
      }
    },
 
-   _onPaperChangeJointNodes : function(e) {
+   onChangeGraph : function(e) {
      this.scaleContentToFit();
    },
 
    _applyPaper : function(value) {
      // Clear existing papers
      if (this.getJointPaper()) {
-       this.getPaper().removeListener(
-         "change:jointNodes",
-         this._onPaperChangeJointNodes
-       );
        this.removeAll();
      }
 
@@ -109,9 +104,9 @@ qx.Class.define("qxjoint.widget.Minimap",
          });
          this.setJointPaper(paper);
 
-         value.addListener(
-           "change:jointNodes",
-           this._onPaperChangeJointNodes,
+         value.getJointGraph().on(
+           'change',
+           this.onChangeGraph,
            this
          );
      }, this);

@@ -10,7 +10,7 @@ var ID = 0;
  * @asset(qxjoint/*)
  */
 qx.Class.define("qxjoint.widget.Paper", {
-    extend : qx.ui.window.Desktop,
+    extend : qxjoint.widget.viewport.ViewPort,
 
     include : [
       qxjoint.widget.MPanable
@@ -35,14 +35,6 @@ qx.Class.define("qxjoint.widget.Paper", {
       }, this);
 
       this.set({backgroundColor: "rgba(255,255,255,0.0)"});
-
-      this.addListener("change:jointNodes", function(e) {
-        this.onNodeMove(e);
-      }, this);
-    },
-
-    events : {
-      "change:jointNodes": "qx.event.type.Event"
     },
 
     properties: {
@@ -77,7 +69,7 @@ qx.Class.define("qxjoint.widget.Paper", {
       toggleShowLinks : function() {
         this._showLinks = !this._showLinks
 
-        this.getWindows().forEach(function(win){
+        this.getNodes().forEach(function(win){
           win.set({zIndex: this._showLinks ? 9 : 10});
         }, this);
       },
@@ -113,6 +105,7 @@ qx.Class.define("qxjoint.widget.Paper", {
                 async: true
             });
             this.setJointPaper(paper);
+            value.on('change', this.onJointGraphChange, this);
         }, this);
       },
 
@@ -120,22 +113,14 @@ qx.Class.define("qxjoint.widget.Paper", {
        * Add a either a wrapped JointJS node and/or a qx.ui.core.Widget.
        */
       addNode : function(node) {
-        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.node.MJointNode)) {
+        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.widget.node.MJointNode)) {
           this.addJointNode(node);
         }
 
-        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.node.MNode) ||
-            qx.Class.isSubClassOf(node.constructor, qxjoint.widget.Container)) {
+        if (qx.Class.isSubClassOf(node.constructor, qxjoint.widget.node.BaseNode)) {
           node.setPaper(this);
-        }
-
-        if (qx.Class.isSubClassOf(node.constructor, qx.ui.core.Widget)) {
           this._add(node);
           node.show();
-        }
-
-        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.widget.MMoving)) {
-          node.addListener("moving", this.onNodeMove, this);
         }
       },
 
@@ -149,17 +134,9 @@ qx.Class.define("qxjoint.widget.Paper", {
         var jointNode = node.getJointNode();
         jointNode.set('z', 1);
         this.getJointGraph().addCell(jointNode);
-
-        node.addListener("change:jointPosition", function(e) {
-          this.fireNonBubblingEvent("change:jointNodes");
-        }, this);
-
-        node.addListener("change:jointSize", function(e) {
-          this.fireNonBubblingEvent("change:jointNodes");
-        }, this);
       },
 
-      onNodeMove : function(e) {
+      onJointGraphChange : function(e) {
         var jPaper = this.getJointPaper();
         if (!jPaper) {
           return;
