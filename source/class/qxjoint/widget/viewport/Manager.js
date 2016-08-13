@@ -12,6 +12,12 @@ qx.Class.define("qxjoint.widget.viewport.Manager",
   {
     __viewPort : null,
 
+    /** @type {Integer} Minimum zIndex to start with for nodes */
+    _minZIndex : 1e5,
+
+    /** @type {Integer} Next zIndex to use to be on Top. */
+    _maxZIndex : 1e6,
+
     setViewPort : function(viewPort)
     {
       this.__viewPort = viewPort;
@@ -21,10 +27,6 @@ qx.Class.define("qxjoint.widget.viewport.Manager",
     getViewPort : function() {
       return this.__viewPort;
     },
-
-
-    /** @type {Integer} Minimum zIndex to start with for windows */
-    _minZIndex : 1e5,
 
 
     // interface implementation
@@ -74,6 +76,17 @@ qx.Class.define("qxjoint.widget.viewport.Manager",
           active = win;
         }
       }
+
+      this._maxZIndex = zIndexOnTop + 2;
+    },
+
+    /**
+     *
+     * @return {Integer} Next zIndex to use to be on Top.
+     */
+    getMaxZIndex : function()
+    {
+      return this._maxZIndex;
     }
   }
 });

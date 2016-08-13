@@ -13,6 +13,20 @@ qx.Theme.define("qxjoint.theme.Appearance",
   appearances :
   {
     /**
+     * The Selector
+     */
+
+    "selector" :
+    {
+      style : function(states)
+      {
+        return {
+          decorator : "selector"
+        };
+      }
+    },
+
+    /**
      * Rect node
      */
     "qxjoint-node-rect" :
@@ -24,7 +38,7 @@ qx.Theme.define("qxjoint.theme.Appearance",
           contentPadding : [ 0, 10, 21, 10 ],
           backgroundColor: "light-blue",
           textColor: "black",
-          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : "qxjoint-node-rect",
+          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : states.selected ? "qxjoint-node-rect-active" : "qxjoint-node-rect",
           showCaptionInPane : true
         };
       }
@@ -37,8 +51,8 @@ qx.Theme.define("qxjoint.theme.Appearance",
       {
         var active = states.active && !states.disabled;
         return {
-          padding : [5, 5, active ? 2 : 5, 5],
-          decorator: active ? "qxjoint-node-rect-caption-active" : "qxjoint-node-rect-caption"
+          padding : [5, 5, active ? 2 : states.selected ? 2 : 5, 5],
+          decorator: active ? "qxjoint-node-rect-caption-active" :  states.selected ? "qxjoint-node-rect-caption-active" : "qxjoint-node-rect-caption"
         };
       }
     },
@@ -58,13 +72,25 @@ qx.Theme.define("qxjoint.theme.Appearance",
           contentPadding : [ 10, 10, 10, 10 ],
           backgroundColor: "light-blue",
           textColor: "black",
-          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
+          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : states.selected ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
         };
       }
     },
 
     "qxjoint-container/icon" : "window/icon",
-    "qxjoint-container/captionbar" : "window/captionbar",
+    "qxjoint-container/captionbar" :
+    {
+      style : function(states)
+      {
+        var active = states.active && !states.disabled;
+        return {
+          padding : [3, 8, active ? 1 : states.selected ? 1 : 3, 8],
+          textColor: active ? "highlight" : "font",
+          decorator: active ? "window-caption-active" : states.selected ? "window-caption-active" : "window-caption"
+        };
+      }
+    },
+
     "qxjoint-container/title" : "window/title",
     "qxjoint-container/pane" :
     {
@@ -90,13 +116,24 @@ qx.Theme.define("qxjoint.theme.Appearance",
           contentPadding : [ 10, 10, 10, 10 ],
           backgroundColor: "rgba(255, 255, 255, 0.3)",
           textColor: "black",
-          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
+          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : states.selected ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
         };
       }
     },
 
     "qxjoint-jnodecontainer/icon" : "window/icon",
-    "qxjoint-jnodecontainer/captionbar" : "window/captionbar",
+    "qxjoint-jnodecontainer/captionbar" :
+    {
+      style : function(states)
+      {
+        var active = states.active && !states.disabled;
+        return {
+          padding : [5, 5, active ? 2 : states.selected ? 2 : 5, 5],
+          decorator: active ? "window-caption-active" : states.selected ? "window-caption-active" : "window-caption"
+        };
+      }
+    },
+
     "qxjoint-jnodecontainer/title" : "window/title",
     "qxjoint-jnodecontainer/pane" :
     {

@@ -10,10 +10,9 @@ qx.Mixin.define("qxjoint.widget.MPanable", {
       init : true
     },
 
-    panForceMiddleMouse :
+    panForceMouse :
     {
-      check : "Boolean",
-      init : false
+      nullable: true
     }
   },
 
@@ -28,33 +27,33 @@ qx.Mixin.define("qxjoint.widget.MPanable", {
     _activatePanHandle : function(clickableWidget)
     {
       if (this.__panHandleActivated) {
-        throw new Error("Can't activate the panhandle twice!");
+        throw new Error("Can't activate MPanable twice!");
       }
 
       if (!clickableWidget) {
-        clickableWidget = this;
+        this.__panWidget = this;
       } else {
         this.__panWidget = clickableWidget;
       }
 
       this.__panDomElement = this.getContentElement().getDomElement();
       this.__panHandleActivated = true;
-      clickableWidget.addListener("pointerdown", this._onPanPointerDown, this);
-      clickableWidget.addListener("pointerup", this._onPanPointerUp, this);
-      clickableWidget.addListener("pointermove", this._onPanPointerMove, this);
-      clickableWidget.addListener("losecapture", this.__onPanLoseCapture, this);
+      this.__panWidget.addListener("pointerdown", this._onPanPointerDown, this);
+      this.__panWidget.addListener("pointerup", this._onPanPointerUp, this);
+      this.__panWidget.addListener("pointermove", this._onPanPointerMove, this);
+      this.__panWidget.addListener("losecapture", this._onPanLoseCapture, this);
     },
 
     _deactivatePanHandle : function()
     {
       if (!this.__panHandleActivated) {
-        throw new Error("Pan handle not activated!");
+        throw new Error("MPanable is not activated!");
       }
 
       this.__panWidget.removeListener("pointerdown", this._onPanPointerDown, this);
       this.__panWidget.removeListener("pointerup", this._onPanPointerUp, this);
       this.__panWidget.removeListener("pointermove", this._onPanPointerMove, this);
-      this.__panWidget.removeListener("losecapture", this.__onPanLoseCapture, this);
+      this.__panWidget.removeListener("losecapture", this._onPanLoseCapture, this);
 
       this.__panDomElement = null;
       this.__panHandleActivated = false;
@@ -71,7 +70,8 @@ qx.Mixin.define("qxjoint.widget.MPanable", {
         return;
       }
 
-      if (this.getPanForceMiddleMouse() && e.getButton() != "middle") {
+      if (this.getPanForceMouse() &&
+          e.getButton() != this.getPanForceMouse()) {
         return;
       }
 
@@ -114,7 +114,7 @@ qx.Mixin.define("qxjoint.widget.MPanable", {
       this.__panClientTop = e.getDocumentTop();
     },
 
-    __onPanLoseCapture : function(e)
+    _onPanLoseCapture : function(e)
     {
       if (!this.hasState("pan")) {
         return;

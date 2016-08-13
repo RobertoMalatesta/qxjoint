@@ -64,6 +64,8 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
         qxjoint.widget.node.MJointNode)) {
       this.constructJointNode();
     }
+
+    this.addListener("pointermove", this.onPointerMove, this, true);
   },
 
   properties :
@@ -107,6 +109,13 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
       init : false,
       apply : "__applyActive",
       event : "changeActive"
+    },
+
+    selected :
+    {
+      check : "Boolean",
+      init : false,
+      apply : "__applySelected"
     },
 
     paper :
@@ -241,6 +250,18 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
       });
     },
 
+    moveDistance : function(left, top) {
+      var props = this.getLayoutProperties();
+
+      this.setDomPosition(props.left + left, props.top + top);
+      this.fireDataEvent("move", this.getBounds());
+
+      this.setLayoutProperties({
+        left : props.left + left,
+        top : props.top + top
+      });
+    },
+
     /*
     ---------------------------------------------------------------------------
       WIDGET API
@@ -265,7 +286,8 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
     _forwardStates :
     {
       active : true,
-      showStatusbar : true
+      showStatusbar : true,
+      selected : true
     },
 
 
@@ -509,12 +531,25 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
     {
       if (old) {
         this.removeState("active");
-      } else {
+      } else if (value) {
         this.addState("active");
       }
 
       if (this._applyActive) {
         this._applyActive(value, old)
+      }
+    },
+
+    __applySelected : function(value, old)
+    {
+      if (old) {
+        this.removeState("selected");
+      } else if (value) {
+        this.addState("selected");
+      }
+
+      if (this._applySelected) {
+        this._applySelected(value, old)
       }
     },
 
@@ -587,6 +622,34 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
     _onDestroyButtonTap : function(e)
     {
       this.destroy();
+    },
+
+    onPointerMove : function (e) {
+      // Only react when dragging is active
+      if (!this.hasState("move")) {
+        return;
+      }
+
+      this._onMovePointerMove(e);
+
+      if (this.onMovePointerMove) {
+        this.onMovePointerMove(e);
+      }
+
+      if (this.hasState("selected")) {
+        var ob = this.getBounds();
+        var domEl = this.getContentElement().getDomElement();
+        var nb = {}
+        nb.left = parseInt(domEl.style.left, 10);
+        nb.top = parseInt(domEl.style.top, 10);
+
+        // We move after with moveDistance again.
+        this.setDomPosition(ob.left, ob.top);
+
+        this.getPaper().moveSelected(nb.left - ob.left, nb.top - ob.top);
+      }
+
+      e.stopPropagation();
     }
   }
 });

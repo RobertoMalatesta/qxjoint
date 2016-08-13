@@ -13,10 +13,10 @@
 
      this.setAppearance("qxjoint-jnodecontainer");
 
+     this.addListener("move", this.onMovePointerMove, this);
+
      var layout = new qx.ui.layout.Grow();
      this.setLayout(layout);
-
-     this.addListener("pointermove", this.onPointerMove, this, true);
    },
 
    properties : {
@@ -33,7 +33,7 @@
        * gets called by qxjoint.MGraphHolder.addNode()
        */
      addNode : function(node) {
-        this.getPaper().addJointNode(node);        
+        this.getPaper().addJointNode(node);
         node.setPaper(this.getPaper());
         node.set({opacity: 1.0})
         node.addListenerOnce(
@@ -138,30 +138,26 @@
       );
     },
 
+    _applySelected : function(value, old) {
+      this.getNodes().forEach(function(node) {
+        node.setSelected(value);
+      });
+    },
+
     // Overriden
     destroy : function() {
       var nodes = this.getNodes().slice();
-      nodes.forEach(function(child) {
-        this.debug(child.getCaption());
-        child.destroy();
-      }, this);
+      nodes.forEach(function(node) {
+        node.destroy();
+      });
 
       this.base(arguments);
     },
 
-    onPointerMove : function(e) {
-      // Only react when dragging is active
-      if (!this.hasState("move")) {
-        return;
-      }
-
-      this._onMovePointerMove(e);
-
-      this.getNodes().forEach(function(child) {
-        child.moveJointNodeBelow();
+    onMovePointerMove : function(e) {
+      this.getNodes().forEach(function(node) {
+        node.moveJointNodeBelow();
       });
-
-      e.stopPropagation();
     }
    }
  });

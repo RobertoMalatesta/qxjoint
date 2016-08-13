@@ -12,6 +12,16 @@ qx.Theme.define("qxjoint.theme.Decoration",
 {
   decorations :
   {
+    "selector" :
+    {
+      style :
+      {
+        width: 2,
+        color: "light-blue",
+        style: "dotted"
+      }
+    },
+
     "qxjoint-node-rect" :
     {
       include: "window",
@@ -38,7 +48,6 @@ qx.Theme.define("qxjoint.theme.Decoration",
       style :
       {
         radius: [3, 3, 0, 0],
-        color: "window-border",
         widthBottom: 0
       }
     },

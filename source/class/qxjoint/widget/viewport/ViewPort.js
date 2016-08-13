@@ -64,6 +64,13 @@ qx.Class.define("qxjoint.widget.viewport.ViewPort",
       return this.__manager;
     },
 
+    /**
+     * @return {Integer} Next zIndex to use to be on Top.
+     */
+    getMaxZIndex : function()
+    {
+      return this.getNodeManager().getMaxZIndex();
+    },
 
     /**
      * Whether the configured layout supports a maximized window
@@ -183,6 +190,50 @@ qx.Class.define("qxjoint.widget.viewport.ViewPort",
         this._nodes = [];
       }
       return this._nodes;
+    },
+
+    /**
+     * Select all nodes withing bounds and deselect all others.
+     *
+     * @param b {} The bounds of the selector or
+     *                  "null" to deselect all.
+     */
+    setSelected : function(b)
+    {
+      if (!b) {
+        this.getNodes().forEach(function(node){
+          node.setSelected(false);
+        });
+
+        return;
+      }
+
+      b.right = b.left + b.width;
+      b.bottom = b.top + b.height;
+
+      var deselectNodes = this.getNodes().slice(0);
+      this.getNodes().forEach(function(node){
+        var nb = node.getBounds();
+        nb.right = nb.left + nb.width;
+        nb.bottom = nb.top + nb.height;
+
+        if (nb.left >= b.left && nb.top >= b.top && nb.right <= b.right && nb.bottom <= b.bottom) {
+          node.setSelected(true);
+          qx.lang.Array.remove(deselectNodes, node);
+        }
+      });
+
+      deselectNodes.forEach(function(node){
+        node.setSelected(false);
+      });
+    },
+
+    moveSelected : function(left, top) {
+      this.getNodes().forEach(function(node){
+        if (node.hasState("selected")) {
+          node.moveDistance(left, top);
+        }
+      });
     }
   },
 

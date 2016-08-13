@@ -14,7 +14,8 @@ qx.Class.define("qxjoint.widget.Paper", {
     extend : qxjoint.widget.viewport.ViewPort,
 
     include : [
-      qxjoint.widget.MPanable
+      qxjoint.widget.MPanable,
+      qxjoint.widget.MSelector,
     ],
 
     construct : function() {
@@ -86,8 +87,13 @@ qx.Class.define("qxjoint.widget.Paper", {
         widget.setUserBounds(0, 0, bounds.width, bounds.height)
         this.add(widget);
 
+        // Pan
         this._activatePanHandle(widget);
-        this.setPanForceMiddleMouse(true);
+        this.setPanForceMouse("middle");
+
+        // Selector
+        this._activateSelector(widget);
+        this.setSelectorForceMouse("left");
 
         this.__htmlWidget = widget;
 
@@ -147,8 +153,8 @@ qx.Class.define("qxjoint.widget.Paper", {
         // 15 = No scrollbar.
         this.__htmlWidget.setUserBounds(
           0, 0,
-          Math.max(minBounds.width - 15, jPaper.options.width),
-          Math.max(minBounds.height - 15, jPaper.options.height)
+          Math.max(minBounds.width - 15, jPaper.options.width + 50),
+          Math.max(minBounds.height - 15, jPaper.options.height + 50)
         );
       },
 

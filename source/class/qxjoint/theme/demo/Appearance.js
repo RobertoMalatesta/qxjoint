@@ -24,7 +24,7 @@ qx.Theme.define("qxjoint.theme.demo.Appearance",
           contentPadding : [ 10, 10, 10, 10 ],
           backgroundColor: "cloud-service",
           textColor: "black",
-          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
+          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : states.selected ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
         };
       }
     },
@@ -43,7 +43,7 @@ qx.Theme.define("qxjoint.theme.demo.Appearance",
           contentPadding : [ 10, 10, 10, 10 ],
           backgroundColor: "container",
           textColor: "black",
-          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
+          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : states.selected ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
         };
       }
     },
