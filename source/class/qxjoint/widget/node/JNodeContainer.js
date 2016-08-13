@@ -15,7 +15,6 @@
 
      var layout = new qx.ui.layout.Grow();
      this.setLayout(layout);
-     this.set({backgroundColor: "rgba(255,255,255,0.3)"});
 
      this.addListener("pointermove", this.onPointerMove, this, true);
    },
@@ -63,15 +62,24 @@
     },
 
     updateBoundsAndContentsAlignment : function(e) {
+      if (!this.getAutoReorder()) {
+        return;
+      }
+
       var spacing = this.getAutoReorderSpacing();
-      if (this.getAutoReorder()) {
-        var childs = this.getNodes();
+      var childs = this.getNodes();
+      var length = childs.length;
 
-        var child0Bounds = childs[0].getBounds();
-        var width = child0Bounds.width;
-        var height = child0Bounds.height;
+      if (length < 1) {
+        return;
+      }
 
-        var length = childs.length;
+      var child0Bounds = childs[0].getBounds();
+      var width = child0Bounds.width;
+      var height = child0Bounds.height;
+
+
+      if (length > 1) {
         for (var i = 1; i <= length; i++) {
           var mod = i % 2
           var div = Math.floor(i / 2);
@@ -98,16 +106,36 @@
       var wm = length / 2 > 1 ? 2 : 1;
       var hm = Math.round(length / 2 / 2) + 1;
       var insets = this.getInsets();
-      this.setWidth(
+      this.setMinWidth(
         (wm * width + (wm * spacing)) +
         spacing +
         insets.left + insets.right)
-      this.setHeight(
+      this.setMinHeight(
         (hm * height + (hm * spacing)) +
         spacing +
         cbHeight +
         stHeight +
         insets.top + insets.bottom)
+
+      if (length == 1) {
+        this.addListenerOnce("resize", function(e){
+          childs[0].center();
+        }, this);
+      }
+
+      // TODO: Havent found a way to to do this without a timer yet.
+      var timer = qx.util.TimerManager.getInstance();
+      timer.start(function(userData, timerId)
+        {
+          childs.forEach(function(child) {
+            child.moveJointNodeBelow();
+          });
+        },
+        0,
+        this,
+        null,
+        0
+      );
     },
 
     // Overriden

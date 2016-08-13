@@ -11,10 +11,10 @@
 /**
  * This is the main application class of your custom application "qxjoint"
  *
- * @asset(qxjoint/*)
  * @asset(qx/icon/${qx.icontheme}/22/actions/document-new.png)
  * @asset(qx/icon/${qx.icontheme}/22/actions/edit-copy.png)
- * @ignore(joint.*)
+ * @asset(qxjoint/demo/icon/22x22/*)
+ * @ignore(joint.dia.Link)
  */
 qx.Class.define("qxjoint.Application",
 {
@@ -166,17 +166,23 @@ qx.Class.define("qxjoint.Application",
 
       // Main content
       paper.addListener("change:jointPaper", function(e) {
-        var dns = new qxjoint.widget.node.Container("DNS Service")
+        var dns = new qxjoint.widget.node.Container("DNS", "qxjoint/demo/icon/22x22/dns.png");
+        dns.setAppearance("cloud-service");
+        dns.setWidth(130);
         dns.moveTo(100, 100);
         paper.addNode(dns);
 
-        var router = new qxjoint.widget.node.Container("Router Service")
+        var router = new qxjoint.widget.node.Container("Router", "qxjoint/demo/icon/22x22/router.png");
+        router.setAppearance("cloud-service");
+        router.setWidth(130);
         router.moveTo(300, 100);
         paper.addNode(router);
 
-        var c1002 = new qxjoint.widget.node.JNodeContainer("C1002");
+        var c1002 = new qxjoint.widget.node.JNodeContainer("C1002", "qxjoint/demo/icon/22x22/lxd.png");
+        c1002.setWidth(121);
+        c1002.setAppearance("container");
         c1002.setAutoReorder(true);
-        c1002.moveTo(300, 300);
+        c1002.moveTo(308, 300);
         paper.addNode(c1002);
 
         var c1002_nignx = new qxjoint.widget.node.Rect('NGINX');
@@ -186,7 +192,9 @@ qx.Class.define("qxjoint.Application",
         c1002.addNode(c1002_varnish);
         c1002.addNode(c1002_haproxy);
 
-        var c1003 = new qxjoint.widget.node.JNodeContainer("C1003");
+        var c1003 = new qxjoint.widget.node.JNodeContainer("C1003", "qxjoint/demo/icon/22x22/lxd.png");
+        c1003.setWidth(121);
+        c1003.setAppearance("container");
         c1003.setAutoReorder(true);
         c1003.moveTo(600, 300);
         paper.addNode(c1003);
@@ -194,7 +202,9 @@ qx.Class.define("qxjoint.Application",
         var c1003_plone = new qxjoint.widget.node.Rect('Plone');
         c1003.addNode(c1003_plone);
 
-        var c1000 = new qxjoint.widget.node.JNodeContainer("C1000");
+        var c1000 = new qxjoint.widget.node.JNodeContainer("C1000", "qxjoint/demo/icon/22x22/lxd.png");
+        c1000.setWidth(121);
+        c1000.setAppearance("container");
         c1000.setAutoReorder(true);
         c1000.moveTo(100, 500);
         paper.addNode(c1000);
@@ -202,12 +212,14 @@ qx.Class.define("qxjoint.Application",
         var c1000_quaive = new qxjoint.widget.node.Rect('Quaive');
         c1000.addNode(c1000_quaive);
 
-        var c1001 = new qxjoint.widget.node.JNodeContainer("C1001");
+        var c1001 = new qxjoint.widget.node.JNodeContainer("C1001", "qxjoint/demo/icon/22x22/lxd.png");
+        c1001.setWidth(121);
+        c1001.setAppearance("container");
         c1001.setAutoReorder(true);
         c1001.moveTo(600, 500);
         paper.addNode(c1001);
 
-        var c1001_quaive = new qxjoint.widget.node.Rect('AlwaysActive');
+        var c1001_quaive = new qxjoint.widget.node.Rect('Quaive');
         c1001.addNode(c1001_quaive);
 
         var link1 = new joint.dia.Link({

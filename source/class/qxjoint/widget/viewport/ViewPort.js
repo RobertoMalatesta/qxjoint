@@ -1,5 +1,5 @@
 /**
- * A container can hold nodes.
+ * A ViewPort can hold nodes.
  */
 qx.Class.define("qxjoint.widget.viewport.ViewPort",
 {

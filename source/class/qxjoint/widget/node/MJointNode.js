@@ -70,10 +70,6 @@ qx.Mixin.define("qxjoint.widget.node.MJointNode",
       }, this);
 
       this.addListener("pointermove", this.onJointPointerMove, this, true);
-      this.addListener("move", function(e) {
-        this.debug("Moving node: " + this.getCaption());
-        this.moveJointNodeBelow
-      }, this, true);
     },
 
     create : function () {

@@ -8,7 +8,7 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.qxjoint.Color",
+qx.Theme.define("qxjoint.theme.Color",
 {
   colors :
   {

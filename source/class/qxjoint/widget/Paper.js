@@ -7,7 +7,8 @@
 var ID = 0;
 
 /**
- * @asset(qxjoint/*)
+ * @asset(qxjoint/css/*)
+ * @asset(qxjoint/js/*)
  */
 qx.Class.define("qxjoint.widget.Paper", {
     extend : qxjoint.widget.viewport.ViewPort,

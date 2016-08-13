@@ -8,7 +8,7 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.qxjoint.Appearance",
+qx.Theme.define("qxjoint.theme.Appearance",
 {
   appearances :
   {
@@ -53,8 +53,8 @@ qx.Theme.define("qxjoint.theme.qxjoint.Appearance",
       style : function(states)
       {
         return {
-          width: 90,
-          height: 90,
+          minWidth: 106,
+          minHeight: 54,
           contentPadding : [ 10, 10, 10, 10 ],
           backgroundColor: "light-blue",
           textColor: "black",
@@ -85,10 +85,10 @@ qx.Theme.define("qxjoint.theme.qxjoint.Appearance",
       style : function(states)
       {
         return {
-          width: 90,
-          height: 90,
+          minWidth: 121,
+          minHeight: 116,
           contentPadding : [ 10, 10, 10, 10 ],
-          backgroundColor: "light-blue",
+          backgroundColor: "rgba(255, 255, 255, 0.3)",
           textColor: "black",
           decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
         };
@@ -103,7 +103,7 @@ qx.Theme.define("qxjoint.theme.qxjoint.Appearance",
       style : function(states)
       {
         return {
-          backgroundColor: "white"
+          backgroundColor: "rgba(255, 255, 255, 0.0)"
         };
       }
     },

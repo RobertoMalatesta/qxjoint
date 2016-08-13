@@ -24,48 +24,47 @@ Add this as submodule to your qooxdoo application:
     git submodule add https://github.com/drawstack/qxjoint.git
     cd ..
 
-Symlink `qxjoint` resources to your resource folder:
-
-.. code-block:: bash
-
-    ln -s ../../vendor/qxjoint/source/resource/qxjoint source/resource/
-
-Add these lines to your applications `config.json`:
+Extend your `config.json` with these lines:
 
 .. code-block:: json
 
+    "let" : {
+      "QXJOINT"      : "vendor/qxjoint"
+    },
+
+    "config-warnings" :
     {
-      "config-warnings" :
-      {
-        "job-shadowing" : ["source", "source-script", "build-script", "libraries"],
+    "job-shadowing" : ["source", "source-script", "build-script", "libraries"],
+    },
+
+    "jobs" : {
+      "libraries" : {
+          "library" :
+            [
+              {
+                "manifest" : "${QXJOINT}/Manifest.json"
+              }
+            ]
+      },
+      "qxjoint-resources": {
+        "add-script": [
+          {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/js/jquery.min.js"},
+          {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/js/lodash.min.js"},
+          {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/js/backbone-min.js"},
+          {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/js/joint.min.js"}
+        ],
+        "add-css": [
+          {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/css/joint.min.css"}
+        ]
       },
 
-      "jobs" :
-      {
-        "libraries" :
-        {
-          "library" :
-          [
-            {
-              "manifest" : "vendor/qxjoint/Manifest.json"
-            }
-          ]
-        },
-
-        "qxjoint-resources": {
-          "add-script": [
-            {"uri": "resource/qxjoint/js/jquery.min.js"},
-            {"uri": "resource/qxjoint/js/lodash.min.js"},
-            {"uri": "resource/qxjoint/js/backbone-min.js"},
-            {"uri": "resource/qxjoint/js/joint.min.js"}
-          ],
-          "add-css": [
-            {"uri": "resource/qxjoint/css/joint.min.css"}
-          ]
-        },
-
-        "source-script" : { "extend": ["qxjoint-resources"] },
-        "build-script"  : { "extend": ["qxjoint-resources"] }
+      "source-script" : {
+          "extend": ["qxjoint-resources"],
+          "let" : { "QXJOINT_RESOURCEDIR" : "${QXJOINT}/../source" }
+      },
+      "build-script"  : {
+          "extend": ["qxjoint-resources"],
+          "let" : { "QXJOINT_RESOURCEDIR" : "." }
       }
     }
 
@@ -101,13 +100,13 @@ Then change your applications `config.json` to use these resources:
     {
         "qxjoint-resources": {
           "add-script": [
-            {"uri": "resource/qxjoint/js/jquery.js"},
-            {"uri": "resource/qxjoint/js/lodash.js"},
-            {"uri": "resource/qxjoint/js/backbone.js"},
-            {"uri": "resource/qxjoint/js/joint.js"}
+            {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/js/jquery.js"},
+            {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/js/lodash.js"},
+            {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/js/backbone.js"},
+            {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/js/joint.js"}
           ],
           "add-css": [
-            {"uri": "resource/qxjoint/css/joint.min.css"}
+            {"uri": "${QXJOINT_RESOURCEDIR}/resource/qxjoint/css/joint.min.css"}
           ]
         }
       }
@@ -124,3 +123,8 @@ License
 -------
 
 MIT, the libraries have theier own licenses.
+
+- jQuery - MIT
+- lodash - MIT
+- Backbone.js - MIT
+- JointJS - MPL 2.0

@@ -8,7 +8,7 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.qxjoint.Decoration",
+qx.Theme.define("qxjoint.theme.Decoration",
 {
   decorations :
   {
