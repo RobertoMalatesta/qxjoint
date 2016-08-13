@@ -1,7 +1,7 @@
 /**
  * A ViewPort can hold nodes.
  */
-qx.Class.define("qxjoint.widget.viewport.ViewPort",
+qx.Class.define("qxjoint.widget.viewport.Viewport",
 {
   extend : qx.ui.core.Widget,
 

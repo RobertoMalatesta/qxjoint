@@ -1,5 +1,5 @@
 /**
- * A JNodeContainer holds a qxjoint.widget.viewport.ViewPort which can hold
+ * A JNodeContainer holds a qxjoint.widget.viewport.Viewport which can hold
  * Joint nodes.
  */
  qx.Class.define("qxjoint.widget.node.JNodeContainer",
@@ -50,7 +50,7 @@
 
     getViewPort : function() {
       if (!this.__viewPort) {
-         this.__viewPort = new qxjoint.widget.viewport.ViewPort();
+         this.__viewPort = new qxjoint.widget.viewport.Viewport();
          this.add(this.__viewPort);
       }
 

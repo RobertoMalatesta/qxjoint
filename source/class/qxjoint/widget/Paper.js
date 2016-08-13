@@ -11,7 +11,7 @@ var ID = 0;
  * @asset(qxjoint/js/*)
  */
 qx.Class.define("qxjoint.widget.Paper", {
-    extend : qxjoint.widget.viewport.ViewPort,
+    extend : qxjoint.widget.viewport.Viewport,
 
     include : [
       qxjoint.widget.MPanable,
