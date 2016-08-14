@@ -18,10 +18,17 @@ qx.Class.define("qxjoint.widget.link.ResourceLink", {
     this.setSource(source);
     this.setTarget(target);
 
-    this._setLayout(new qx.ui.layout.VBox())
+    var layout = new qx.ui.layout.VBox()
+    layout.setSpacing(2);
+    this._setLayout(layout)
     this.setAppearance("qxjoint-resourcelink");
 
-    this.addListener("appear", this._onJointLinkChange, this);
+    this.setDroppable(true);
+    this.addListener("drop", this._onDrop, this);
+    this.addListener("dragover", this._onDragOver, this);
+
+    this.addListener("appear", this.centerToLink, this);
+    this.addListener("resize", this.centerToLink, this);
   },
 
   defer : function(statics, members) {
@@ -32,38 +39,7 @@ qx.Class.define("qxjoint.widget.link.ResourceLink", {
   {
     _strokeWidth : 1,
 
-    _makeLink : function() {
-      return new joint.dia.Link({
-        source: { id: this.getSourceJointNode().id },
-        target: { id: this.getTargetJointNode().id }
-      });
-    },
-
-    _applyJointLink : function(value, old) {
-      if (old) {
-        old.off("change", this._onJointLinkChange);
-      }
-
-      value.on("change", this._onJointLinkChange, this);
-    },
-
-    _applySource : function(value, old) {
-      if (old && old.getJointNode()) {
-        old.getJointNode().off("change", this._onJointLinkChange);
-      }
-
-      value.getJointNode().on("change", this._onJointLinkChange, this);
-    },
-
-    _applyTarget : function(value, old) {
-      if (old && old.getJointNode()) {
-        old.getJointNode().off("change", this._onJointLinkChange);
-      }
-
-      value.getJointNode().on("change", this._onJointLinkChange, this);
-    },
-
-    _onJointLinkChange : function(e) {
+    centerToLink : function(e) {
       var bounds = this.getBounds();
       if (!bounds) {
         // Not appeared
@@ -91,6 +67,50 @@ qx.Class.define("qxjoint.widget.link.ResourceLink", {
         left : left,
         top : top
       });
+    },
+
+    _makeLink : function() {
+      return new joint.dia.Link({
+        source: { id: this.getSourceJointNode().id },
+        target: { id: this.getTargetJointNode().id }
+      });
+    },
+
+    _applyJointLink : function(value, old) {
+      if (old) {
+        old.off("change", this.centerToLink);
+      }
+
+      value.on("change", this.centerToLink, this);
+    },
+
+    _applySource : function(value, old) {
+      if (old && old.getJointNode()) {
+        old.getJointNode().off("change", this.centerToLink);
+      }
+
+      value.getJointNode().on("change", this.centerToLink, this);
+    },
+
+    _applyTarget : function(value, old) {
+      if (old && old.getJointNode()) {
+        old.getJointNode().off("change", this.centerToLink);
+      }
+
+      value.getJointNode().on("change", this.centerToLink, this);
+    },
+
+    _onDragOver : function(e) {
+      if (!e.supportsType("qxjoint/resource")) {
+        e.preventDefault();
+      }
+    },
+
+    _onDrop : function(e)  {
+      var items = e.getData("qxjoint/resource");
+      for (var i=0, l=items.length; i<l; i++) {
+        this.add(items[i]);
+      }
     }
   }
 });

@@ -14,6 +14,7 @@
  * @asset(qx/icon/${qx.icontheme}/22/actions/document-new.png)
  * @asset(qx/icon/${qx.icontheme}/22/actions/edit-copy.png)
  * @asset(qxjoint/demo/icon/22x22/*)
+ * @asset(qxjoint/demo/icon/16x16/*)
  */
 qx.Class.define("qxjoint.Application",
 {
@@ -47,7 +48,7 @@ qx.Class.define("qxjoint.Application",
 
       var paper = new qxjoint.widget.Paper();
       paper.setLinkPinning(false);
-      // paper.setLinkClass(qxjoint.widget.link.ResourceLink);
+      paper.setLinkClass(qxjoint.widget.link.ResourceLink);
 
       // Logo
       layout = new qx.ui.layout.Atom()
@@ -111,8 +112,17 @@ qx.Class.define("qxjoint.Application",
       leftColumn.add(minimap);
 
       // Add buttons
-      var abContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox());
+      var abContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
+        padding : 10,
+        decorator : "main"
+      });
       leftColumn.add(abContainer);
+
+      var abLabel = new qx.ui.basic.Label("<strong>" + this.tr("Add Node") + "</strong>");
+      abLabel.setRich(true);
+      abLabel.setTextAlign("center");
+      abContainer.add(abLabel)
+
 
       var bAddRect = new qx.ui.form.Button("Add Rect");
       bAddRect.addListener("execute", function(e) {
@@ -139,6 +149,8 @@ qx.Class.define("qxjoint.Application",
       abContainer.add(bAddContainer);
 
 
+      leftColumn.add(this.getResourceContainer());
+
 
       // Right content column
       var paper_container = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
@@ -149,7 +161,7 @@ qx.Class.define("qxjoint.Application",
       //
       var paper_toolbar = new qx.ui.toolbar.ToolBar();
       paper_container.add(paper_toolbar);
-      //
+      //s
       var part1 = new qx.ui.toolbar.Part();
       var tb_btn_containers = new qx.ui.toolbar.RadioButton("Nodes", "icon/22/actions/document-new.png");
       var tb_btn_links = new qx.ui.toolbar.RadioButton("Links", "icon/22/actions/edit-copy.png");
@@ -166,30 +178,27 @@ qx.Class.define("qxjoint.Application",
 
       // Main content
       paper.addListener("change:jointPaper", function(e) {
-        var dns = new qxjoint.widget.node.Rect("DNS", "qxjoint/demo/icon/22x22/dns.png");
+        var dns = new qxjoint.widget.node.Rect("DNS", "qxjoint/demo/icon/22x22/cloud-service/dns.png");
         dns.setAppearance("cloud-service");
         dns.setWidth(130);
         dns.moveTo(10, 100);
         paper.addNode(dns);
 
-        var router = new qxjoint.widget.node.Rect("Router", "qxjoint/demo/icon/22x22/router.png");
+        var router = new qxjoint.widget.node.Rect("Router", "qxjoint/demo/icon/22x22/cloud-service/router.png");
         router.setAppearance("cloud-service");
         router.setWidth(130);
-        router.moveTo(300, 100);
+        router.moveTo(363, 94);
         paper.addNode(router);
 
         // Link router with DNS
         var rd_link = new qxjoint.widget.link.ResourceLink(router, dns);
-        rd_link.add(new qx.ui.basic.Label("Domain1"));
-        rd_link.add(new qx.ui.basic.Label("Domain2"));
-        rd_link.add(new qx.ui.basic.Label("Domain3"));
         paper.addLink(rd_link);
 
-        var c1002 = new qxjoint.widget.node.JNodeContainer("C1002", "qxjoint/demo/icon/22x22/lxd.png");
+        var c1002 = new qxjoint.widget.node.JNodeContainer("C1002", "qxjoint/demo/icon/22x22/container/lxd.png");
         c1002.setWidth(121);
         c1002.setAppearance("container");
         c1002.setAutoReorder(true);
-        c1002.moveTo(308, 300);
+        c1002.moveTo(362, 295);
         paper.addNode(c1002);
 
         var c1002_nignx = new qxjoint.widget.node.Rect('NGINX');
@@ -201,55 +210,98 @@ qx.Class.define("qxjoint.Application",
 
         // Link C1002_Nginx with the router
         var c1002_router_link = new qxjoint.widget.link.ResourceLink(c1002_nignx, router);
-        c1002_router_link.add(new qx.ui.basic.Label("Domain1"));
-        c1002_router_link.add(new qx.ui.basic.Label("Domain3"));
         paper.addLink(c1002_router_link);
-        paper.addLink(new qxjoint.widget.link.Link(c1002_nignx, c1002_varnish));
-        paper.addLink(new qxjoint.widget.link.Link(c1002_varnish, c1002_haproxy));
+        paper.addLink(new qxjoint.widget.link.ResourceLink(c1002_nignx, c1002_varnish));
+        paper.addLink(new qxjoint.widget.link.ResourceLink(c1002_varnish, c1002_haproxy));
 
 
-        var c1003 = new qxjoint.widget.node.JNodeContainer("C1003", "qxjoint/demo/icon/22x22/lxd.png");
+        var c1003 = new qxjoint.widget.node.JNodeContainer("C1003", "qxjoint/demo/icon/22x22/container/lxd.png");
         c1003.setWidth(121);
         c1003.setAppearance("container");
         c1003.setAutoReorder(true);
-        c1003.moveTo(600, 300);
+        c1003.moveTo(728, 48);
         paper.addNode(c1003);
 
         var c1003_plone = new qxjoint.widget.node.Rect('Plone');
         c1003.addNode(c1003_plone);
 
         var c1003_router_link = new qxjoint.widget.link.ResourceLink(c1003_plone, router);
-        c1003_router_link.add(new qx.ui.basic.Label("Domain2"));
         paper.addLink(c1003_router_link);
 
-        var c1000 = new qxjoint.widget.node.JNodeContainer("C1000", "qxjoint/demo/icon/22x22/lxd.png");
+        var c1000 = new qxjoint.widget.node.JNodeContainer("C1000", "qxjoint/demo/icon/22x22/container/lxd.png");
         c1000.setWidth(121);
         c1000.setAppearance("container");
         c1000.setAutoReorder(true);
-        c1000.moveTo(100, 500);
+        c1000.moveTo(103, 517);
         paper.addNode(c1000);
 
         var c1000_quaive = new qxjoint.widget.node.Rect('Quaive');
         c1000.addNode(c1000_quaive);
-        paper.addLink(new qxjoint.widget.link.Link(c1000_quaive, c1002_haproxy));
+        var c1001_quaive_link = new qxjoint.widget.link.ResourceLink(c1000_quaive, c1002_haproxy);
+        paper.addLink(c1001_quaive_link);
 
 
-        var c1001 = new qxjoint.widget.node.JNodeContainer("C1001", "qxjoint/demo/icon/22x22/lxd.png");
+        var c1001 = new qxjoint.widget.node.JNodeContainer("C1001", "qxjoint/demo/icon/22x22/container/lxd.png");
         c1001.setWidth(121);
         c1001.setAppearance("container");
         c1001.setAutoReorder(true);
-        c1001.moveTo(600, 500);
+        c1001.moveTo(361, 598);
         paper.addNode(c1001);
 
         var c1001_quaive = new qxjoint.widget.node.Rect('Quaive');
         c1001.addNode(c1001_quaive);
-        paper.addLink(new qxjoint.widget.link.Link(c1001_quaive, c1002_haproxy));
+        var c1001_quaive_link = new qxjoint.widget.link.ResourceLink(c1001_quaive, c1002_haproxy);
+        paper.addLink(c1001_quaive_link);
       }, this);
 
       main_container.getChildren()[0].setWidth(200);
       main_container.getChildren()[2].setWidth(200);
       var application_root = this.getRoot();
       application_root.add(main_container, {edge: 0});
+    },
+
+    getResourceContainer : function() {
+      var rContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
+        padding : 10,
+        decorator : "main"
+      });
+      var rLabel = new qx.ui.basic.Label("<strong>" + this.tr("Resources") + "</strong>");
+      rLabel.setRich(true);
+      rLabel.setTextAlign("center");
+      rContainer.add(rLabel)
+
+      var rList = new qx.ui.form.List;
+      rList.add(new qx.ui.form.ListItem("q.customer.com", "qxjoint/demo/icon/16x16/resource/dns.png"));
+      rList.add(new qx.ui.form.ListItem("q.your-domain.com", "qxjoint/demo/icon/16x16/resource/dns.png"));
+      rList.add(new qx.ui.form.ListItem("plone.com", "qxjoint/demo/icon/16x16/resource/dns.png"));
+      rContainer.add(rList);
+
+      rList.setSelectionMode("multi")
+      rList.setDraggable(true);
+      rList.addListener("dragstart", function(e) {
+        e.addAction("copy");
+
+        e.addType("qxjoint/resource");
+      });
+      rList.addListener("droprequest", function(e)
+      {
+        var type = e.getCurrentType();
+
+        if (type == "qxjoint/resource")
+        {
+          var items = this.getSelection();
+          var result = []
+
+          for (var i=0, l=items.length; i<l; i++) {
+            result.push(new qxjoint.widget.Resource(items[i].getLabel(), items[i].getIcon()));
+          }
+
+          // Add data to manager
+          e.addData(type, result);
+        }
+      });
+
+      return rContainer;
     }
   }
 });

@@ -21,7 +21,7 @@
 
    properties : {
      autoReorder : { check: "Boolean", init: false },
-     autoReorderSpacing :  { check: "Integer", init: 10 }
+     autoReorderSpacing :  { check: "Integer", init: 20 }
    },
 
    members : {

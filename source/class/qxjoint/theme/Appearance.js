@@ -8,6 +8,9 @@
 
 ************************************************************************ */
 
+/**
+ * @asset(qxjoint/decoration/*)
+ */
 qx.Theme.define("qxjoint.theme.Appearance",
 {
   appearances :
@@ -22,6 +25,20 @@ qx.Theme.define("qxjoint.theme.Appearance",
       {
         return {
           decorator : "selector"
+        };
+      }
+    },
+
+    "qxjoint-destroy-button" :
+    {
+      alias : "button",
+      style : function(states)
+      {
+        return {
+          marginLeft : 2,
+          icon : "qxjoint/decoration/close.png",
+          padding : [ 1, 2 ],
+          cursor : states.disabled ? undefined : "pointer"
         };
       }
     },
@@ -57,7 +74,7 @@ qx.Theme.define("qxjoint.theme.Appearance",
       }
     },
     "qxjoint-node-rect/title" : "window/title",
-    "qxjoint-node-rect/destroy-button" : "window/close-button",
+    "qxjoint-node-rect/destroy-button" : "qxjoint-destroy-button",
 
     /**
      * Container
@@ -101,7 +118,7 @@ qx.Theme.define("qxjoint.theme.Appearance",
         };
       }
     },
-    "qxjoint-container/destroy-button" : "window/close-button",
+    "qxjoint-container/destroy-button" : "qxjoint-destroy-button",
 
     /**
      * Joint Node Container
@@ -144,7 +161,7 @@ qx.Theme.define("qxjoint.theme.Appearance",
         };
       }
     },
-    "qxjoint-jnodecontainer/destroy-button" : "window/close-button",
+    "qxjoint-jnodecontainer/destroy-button" : "qxjoint-destroy-button",
 
     "qxjoint-resourcelink" :
     {
@@ -155,6 +172,20 @@ qx.Theme.define("qxjoint.theme.Appearance",
           decorator : "window"
         };
       }
-    }
+    },
+
+    "qxjoint-resource" : "atom",
+    "qxjoint-resource/label" : "atom/label",
+    "qxjoint-resource/icon" :
+    {
+        alias : "atom/icon",
+        style : function(states)
+        {
+          return {
+            paddingRight: 5
+          };
+        }
+    },
+    "qxjoint-resource/destroy-button" : "qxjoint-destroy-button"
   }
 });
