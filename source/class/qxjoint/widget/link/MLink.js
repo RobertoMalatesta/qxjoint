@@ -19,16 +19,25 @@ qx.Mixin.define("qxjoint.widget.link.MLink", {
     },
 
     jointLink : {
-      event : "change:jointLink"
+      apply: "__applyJointLink"
     }
   },
 
   members :
   {
+    _jointView : null,
+
     create : function() {
       this.setJointLink(this._makeLink());
+    },
 
-      this.getPaper().getJointGraph().addCell(this.getJointLink());
+    getJointView : function() {
+      if (this._jointView) {
+        return this._jointView;
+      }
+
+      this._jointView = this.getJointLink().findView(this.getPaper().getJointPaper());
+      return this._jointView;
     },
 
     __applySource : function(value, old) {
@@ -53,10 +62,12 @@ qx.Mixin.define("qxjoint.widget.link.MLink", {
       }
     },
 
-    dispose : function() {
-      this.base(arguments);
+    __applyJointLink : function(value, old) {
+      this._jointView = null;
 
-      this.getPaper().getJointGraph().removeCells([this.getJointLink()]);
+      if (this._applyJointLink) {
+        this._applyJointLink(value, old);
+      }
     }
   }
 });

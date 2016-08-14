@@ -47,6 +47,7 @@ qx.Class.define("qxjoint.Application",
 
       var paper = new qxjoint.widget.Paper();
       paper.setLinkPinning(false);
+      paper.setLinkClass(qxjoint.widget.link.ResourceLink);
 
       // Logo
       layout = new qx.ui.layout.Atom()
@@ -168,7 +169,7 @@ qx.Class.define("qxjoint.Application",
         var dns = new qxjoint.widget.node.Rect("DNS", "qxjoint/demo/icon/22x22/dns.png");
         dns.setAppearance("cloud-service");
         dns.setWidth(130);
-        dns.moveTo(100, 100);
+        dns.moveTo(10, 100);
         paper.addNode(dns);
 
         var router = new qxjoint.widget.node.Rect("Router", "qxjoint/demo/icon/22x22/router.png");
@@ -178,7 +179,11 @@ qx.Class.define("qxjoint.Application",
         paper.addNode(router);
 
         // Link router with DNS
-        paper.addLink(new qxjoint.widget.link.Link(router, dns));
+        var rd_link = new qxjoint.widget.link.ResourceLink(router, dns);
+        rd_link.add(new qx.ui.basic.Label("Domain1"));
+        rd_link.add(new qx.ui.basic.Label("Domain2"));
+        rd_link.add(new qx.ui.basic.Label("Domain3"));
+        paper.addLink(rd_link);
 
         var c1002 = new qxjoint.widget.node.JNodeContainer("C1002", "qxjoint/demo/icon/22x22/lxd.png");
         c1002.setWidth(121);
@@ -195,7 +200,10 @@ qx.Class.define("qxjoint.Application",
         c1002.addNode(c1002_haproxy);
 
         // Link C1002_Nginx with the router
-        paper.addLink(new qxjoint.widget.link.Link(c1002_nignx, router));
+        var c1002_router_link = new qxjoint.widget.link.ResourceLink(c1002_nignx, router);
+        c1002_router_link.add(new qx.ui.basic.Label("Domain1"));
+        c1002_router_link.add(new qx.ui.basic.Label("Domain3"));
+        paper.addLink(c1002_router_link);
         paper.addLink(new qxjoint.widget.link.Link(c1002_nignx, c1002_varnish));
         paper.addLink(new qxjoint.widget.link.Link(c1002_varnish, c1002_haproxy));
 
@@ -210,7 +218,9 @@ qx.Class.define("qxjoint.Application",
         var c1003_plone = new qxjoint.widget.node.Rect('Plone');
         c1003.addNode(c1003_plone);
 
-        paper.addLink(new qxjoint.widget.link.Link(c1003_plone, router));
+        var c1003_router_link = new qxjoint.widget.link.ResourceLink(c1003_plone, router);
+        c1003_router_link.add(new qx.ui.basic.Label("Domain2"));
+        paper.addLink(c1003_router_link);
 
         var c1000 = new qxjoint.widget.node.JNodeContainer("C1000", "qxjoint/demo/icon/22x22/lxd.png");
         c1000.setWidth(121);

@@ -55,6 +55,10 @@ qx.Class.define("qxjoint.widget.Paper", {
       linkPinning : {
         check: "Boolean",
         init: true
+      },
+
+      linkClass : {
+        init: qxjoint.widget.link.Link
       }
     },
 
@@ -73,8 +77,8 @@ qx.Class.define("qxjoint.widget.Paper", {
       toggleShowLinks : function() {
         this._showLinks = !this._showLinks
 
-        this.getNodes().forEach(function(win){
-          win.set({zIndex: this._showLinks ? 9 : 10});
+        this.getNodes().forEach(function(node){
+          node.set({zIndex: this._showLinks ? 9 : 10});
         }, this);
 
         if (this._showLinks) {
@@ -139,6 +143,12 @@ qx.Class.define("qxjoint.widget.Paper", {
         this._links.push(link);
         link.setPaper(this);
         link.create();
+        this.getJointGraph().addCell(link.getJointLink());
+
+        if (qx.Class.isSubClassOf(link.constructor, qx.ui.core.Widget)) {
+          this.add(link);
+          link.show();
+        }
       },
 
       _onJointLinkChange : function (jointLink) {
@@ -152,13 +162,11 @@ qx.Class.define("qxjoint.widget.Paper", {
 
           if (qxLink.getJointLink().id == jointLink.id) {
             if (qxLink.getSourceJointNode().id != jointLink.get('source').id) {
-              this.debug("Changed the source");
               var jointNode = this.getJointGraph().getCell(jointLink.get('source').id);
               qxLink.setSource(jointNode.qx);
             }
 
             if (qxLink.getTargetJointNode().id != jointLink.get('target').id) {
-              this.debug("Changed the target");
               var jointNode = this.getJointGraph().getCell(jointLink.get('target').id);
               qxLink.setTarget(jointNode.qx)
             }
@@ -168,7 +176,8 @@ qx.Class.define("qxjoint.widget.Paper", {
           }
         }
         if (!found) {
-          var qxLink = new qxjoint.widget.link.Link(
+          var clazz = this.getLinkClass()
+          var qxLink = new clazz(
             this.getJointGraph().getCell(jointLink.get('source').id).qx,
             this.getJointGraph().getCell(jointLink.get('target').id).qx
           )
@@ -181,8 +190,12 @@ qx.Class.define("qxjoint.widget.Paper", {
       _onJointGraphRemoveCell : function(cell) {
         if (cell.isLink()) {
           for (var i = 0; i < this._links.length; i++) {
-            if (this._links[i].getJointLink().id == cell.id) {
-              this.debug("Removing link: " + cell.id);
+            var link = this._links[i];
+            if (link.getJointLink().id == cell.id) {
+              if (qx.Class.isSubClassOf(link.constructor, qx.ui.core.Widget)) {
+                this.remove(link);
+                link.dispose();
+              }
               qx.lang.Array.removeAt(this._links, i);
               break;
             }
@@ -200,7 +213,7 @@ qx.Class.define("qxjoint.widget.Paper", {
 
         if (qx.Class.isSubClassOf(node.constructor, qxjoint.widget.node.BaseNode)) {
           node.setPaper(this);
-          this._add(node);
+          this.add(node);
           node.show();
         }
       },

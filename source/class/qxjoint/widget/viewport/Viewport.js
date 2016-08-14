@@ -123,7 +123,7 @@ qx.Class.define("qxjoint.widget.viewport.Viewport",
 
 
     /**
-     * Handles the case, when a window is added to the desktop.
+     * Handles the case, when a node is added to the desktop.
      *
      * @param win {qx.ui.window.Window} Window, which has been added
      */

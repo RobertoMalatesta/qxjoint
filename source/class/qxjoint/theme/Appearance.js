@@ -144,6 +144,17 @@ qx.Theme.define("qxjoint.theme.Appearance",
         };
       }
     },
-    "qxjoint-jnodecontainer/destroy-button" : "window/close-button"
+    "qxjoint-jnodecontainer/destroy-button" : "window/close-button",
+
+    "qxjoint-resourcelink" :
+    {
+      style : function(states)
+      {
+        return {
+          padding : [ 5, 5, 5, 5 ],
+          decorator : "window"
+        };
+      }
+    }
   }
 });
