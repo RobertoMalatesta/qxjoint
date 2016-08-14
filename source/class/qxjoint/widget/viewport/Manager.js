@@ -1,3 +1,6 @@
+/**
+ * Manages the zIndex of Nodes.
+ */
 qx.Class.define("qxjoint.widget.viewport.Manager",
 {
   extend : qx.core.Object,
@@ -44,40 +47,41 @@ qx.Class.define("qxjoint.widget.viewport.Manager",
      */
     syncWidget : function()
     {
-      var windows = this.__viewPort.getNodes();
-      // z-index for all three window kinds
+      var nodes = this.__viewPort.getNodes();
+      // z-index for both Node kinds
       var zIndex = this._minZIndex;
-      var zIndexOnTop = zIndex + windows.length * 2;
-      // marker if there is an active window
+      // +2 for the active Node.
+      var zIndexOnTop = zIndex + nodes.length * 2 + 2;
+      // marker if there is an active node
       var active = null;
 
-      for (var i = 0, l = windows.length; i < l; i++)
+      for (var i = 0, l = nodes.length; i < l; i++)
       {
-        var win = windows[i];
-
-        // take the first node as active node
-        active = active || win;
+        var node = nodes[i];
 
         // We use only every second z index to easily insert a blocker between
         // two nodes
-        // AlwaysOnTop Nodes stays on top of Windows.
-        if (win.isAlwaysOnTop()) {
-          win.setZIndex(zIndexOnTop);
+        // AlwaysOnTop Nodes stays on top of Nodes.
+        if (node.isAlwaysOnTop()) {
+          node.setZIndex(zIndexOnTop);
           zIndexOnTop +=2;
 
         } else {
-          win.setZIndex(zIndex);
+          node.setZIndex(zIndex);
           zIndex +=2;
         }
 
-        // store the active window
-        if (win.isActive() ||
-            win.getZIndex() > active.getZIndex()) {
-          active = win;
+        // store the active node
+        if (node.isActive()) {
+          active = node;
         }
       }
 
-      this._maxZIndex = zIndexOnTop + 2;
+      if (active) {
+        active.setZIndex(zIndex);
+      }
+
+      this._maxZIndex = zIndexOnTop;
     },
 
     /**
