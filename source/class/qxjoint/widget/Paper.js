@@ -81,6 +81,11 @@ qx.Class.define("qxjoint.widget.Paper", {
           node.set({zIndex: this._showLinks ? 9 : 10});
         }, this);
 
+        this._links.forEach(function(link){
+          link.set({zIndex: this._showLinks ? 9 : 10});
+        }, this);
+
+
         if (this._showLinks) {
           this._deactivateSelector();
         } else {
