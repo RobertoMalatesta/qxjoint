@@ -317,9 +317,8 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
         case "pane-caption":
           control = new qx.ui.basic.Label(this.getCaption());
           control.setTextAlign("center");
-          // control.setCenter(true);
           var pane = this.getChildControl("pane");
-          pane.setLayout(new qx.ui.layout.VBox());
+          pane.setLayout(new qx.ui.layout.Grow());
           pane.add(control);
           break;
 

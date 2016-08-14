@@ -19,20 +19,20 @@ qx.Theme.define("qxjoint.theme.demo.Appearance",
       style : function(states)
       {
         return {
-          minWidth: 106,
-          minHeight: 54,
-          contentPadding : [ 10, 10, 10, 10 ],
+          width: 90,
+          contentPadding : [ 0, 10, 21, 10 ],
           backgroundColor: "cloud-service",
           textColor: "black",
-          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : states.selected ? "qxjoint-node-rect-active" : "qxjoint-node-rect"
+          decorator : states.maximized ? undefined : states.active ? "qxjoint-node-rect-active" : states.selected ? "qxjoint-node-rect-active" : "qxjoint-node-rect",
+          showCaptionInPane : true
         };
       }
     },
-    "cloud-service/icon" : "qxjoint-container/icon",
-    "cloud-service/captionbar" : "qxjoint-container/captionbar",
-    "cloud-service/title" : "qxjoint-container/title",
-    "cloud-service/pane" : "qxjoint-container/pane",
-    "cloud-service/destroy-button" : "qxjoint-container/destroy-button",
+    "cloud-service/icon" : "qxjoint-node-rect/icon",
+    "cloud-service/captionbar" : "qxjoint-node-rect/captionbar",
+    "cloud-service/title" : "qxjoint-node-rect/title",
+    "cloud-service/pane" : "qxjoint-node-rect/pane",
+    "cloud-service/destroy-button" : "qxjoint-node-rect/destroy-button",
 
     "container" : {
       style : function(states)

@@ -62,6 +62,8 @@ qx.Class.define("qxjoint.widget.Paper", {
       __cssId : null,
       __htmlWidget : null,
 
+      _links : [],
+
       _showLinks : false,
 
       isShowLinks : function() {
@@ -76,11 +78,18 @@ qx.Class.define("qxjoint.widget.Paper", {
         }, this);
       },
 
-      _applyGraph : function(value) {
+      _applyGraph : function(value, old) {
         // Clear existing papers
-        if (this.getJointGraph()) {
+        if (old) {
           this.removeAll();
+          old.off("change:source change:target", this._onJointLinkChange);
+          old.off("change", this._onJointGraphChange)
+          old.off("remove", this._onJointGraphRemoveCell)
         }
+
+        // Listen for links changes
+        value.on("change:source change:target", this._onJointLinkChange, this);
+        value.on("remove", this._onJointGraphRemoveCell, this);
 
         var widget = new qx.ui.embed.Html();
         var bounds = this.getBounds();
@@ -112,8 +121,67 @@ qx.Class.define("qxjoint.widget.Paper", {
                 async: true
             });
             this.setJointPaper(paper);
-            value.on('change', this.onJointGraphChange, this);
+            value.on("change", this._onJointGraphChange, this);
         }, this);
+      },
+
+      addLink : function(link) {
+        if (!qx.Class.hasOwnMixin(link.constructor, qxjoint.widget.link.MLink)) {
+            throw new Error("A link must be a include of qxjoint.widget.link.MLink");
+        }
+
+        this._links.push(link);
+        link.setPaper(this);
+        link.create();
+      },
+
+      _onJointLinkChange : function (jointLink) {
+        if (!jointLink.get('source').id || !jointLink.get('target').id) {
+          return;
+        }
+
+        var found = false;
+        for (var i = 0; i < this._links.length; i++) {
+          var qxLink = this._links[i];
+
+          if (qxLink.getJointLink().id == jointLink.id) {
+            if (qxLink.getSourceJointNode().id != jointLink.get('source').id) {
+              this.debug("Changed the source");
+              var jointNode = this.getJointGraph().getCell(jointLink.get('source').id);
+              qxLink.setSource(jointNode.qx);
+            }
+
+            if (qxLink.getTargetJointNode().id != jointLink.get('target').id) {
+              this.debug("Changed the target");
+              var jointNode = this.getJointGraph().getCell(jointLink.get('target').id);
+              qxLink.setTarget(jointNode.qx)
+            }
+
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          var qxLink = new qxjoint.widget.link.Link(
+            this.getJointGraph().getCell(jointLink.get('source').id).qx,
+            this.getJointGraph().getCell(jointLink.get('target').id).qx
+          )
+          qxLink.setJointLink(jointLink);
+          qxLink.setPaper(this);
+          this._links.push(qxLink);
+        }
+      },
+
+      _onJointGraphRemoveCell : function(cell) {
+        if (cell.isLink()) {
+          for (var i = 0; i < this._links.length; i++) {
+            if (this._links[i].getJointLink().id == cell.id) {
+              this.debug("Removing link: " + cell.id);
+              qx.lang.Array.removeAt(this._links, i);
+              break;
+            }
+          }
+        }
       },
 
       /**
@@ -143,7 +211,7 @@ qx.Class.define("qxjoint.widget.Paper", {
         this.getJointGraph().addCell(jointNode);
       },
 
-      onJointGraphChange : function(e) {
+      _onJointGraphChange : function(e) {
         var jPaper = this.getJointPaper();
         if (!jPaper) {
           return;
@@ -162,6 +230,9 @@ qx.Class.define("qxjoint.widget.Paper", {
         this.base(arguments);
 
         this._deactivatePaneHandle();
+        this._deactivateSelector();
+
+        this._disposeArray(this._links);
       }
     }
 });

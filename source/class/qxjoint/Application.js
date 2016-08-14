@@ -14,7 +14,6 @@
  * @asset(qx/icon/${qx.icontheme}/22/actions/document-new.png)
  * @asset(qx/icon/${qx.icontheme}/22/actions/edit-copy.png)
  * @asset(qxjoint/demo/icon/22x22/*)
- * @ignore(joint.dia.Link)
  */
 qx.Class.define("qxjoint.Application",
 {
@@ -166,17 +165,20 @@ qx.Class.define("qxjoint.Application",
 
       // Main content
       paper.addListener("change:jointPaper", function(e) {
-        var dns = new qxjoint.widget.node.Container("DNS", "qxjoint/demo/icon/22x22/dns.png");
+        var dns = new qxjoint.widget.node.Rect("DNS", "qxjoint/demo/icon/22x22/dns.png");
         dns.setAppearance("cloud-service");
         dns.setWidth(130);
         dns.moveTo(100, 100);
         paper.addNode(dns);
 
-        var router = new qxjoint.widget.node.Container("Router", "qxjoint/demo/icon/22x22/router.png");
+        var router = new qxjoint.widget.node.Rect("Router", "qxjoint/demo/icon/22x22/router.png");
         router.setAppearance("cloud-service");
         router.setWidth(130);
         router.moveTo(300, 100);
         paper.addNode(router);
+
+        // Link router with DNS
+        paper.addLink(new qxjoint.widget.link.Link(router, dns));
 
         var c1002 = new qxjoint.widget.node.JNodeContainer("C1002", "qxjoint/demo/icon/22x22/lxd.png");
         c1002.setWidth(121);
@@ -192,6 +194,12 @@ qx.Class.define("qxjoint.Application",
         c1002.addNode(c1002_varnish);
         c1002.addNode(c1002_haproxy);
 
+        // Link C1002_Nginx with the router
+        paper.addLink(new qxjoint.widget.link.Link(c1002_nignx, router));
+        paper.addLink(new qxjoint.widget.link.Link(c1002_nignx, c1002_varnish));
+        paper.addLink(new qxjoint.widget.link.Link(c1002_varnish, c1002_haproxy));
+
+
         var c1003 = new qxjoint.widget.node.JNodeContainer("C1003", "qxjoint/demo/icon/22x22/lxd.png");
         c1003.setWidth(121);
         c1003.setAppearance("container");
@@ -202,6 +210,8 @@ qx.Class.define("qxjoint.Application",
         var c1003_plone = new qxjoint.widget.node.Rect('Plone');
         c1003.addNode(c1003_plone);
 
+        paper.addLink(new qxjoint.widget.link.Link(c1003_plone, router));
+
         var c1000 = new qxjoint.widget.node.JNodeContainer("C1000", "qxjoint/demo/icon/22x22/lxd.png");
         c1000.setWidth(121);
         c1000.setAppearance("container");
@@ -211,6 +221,8 @@ qx.Class.define("qxjoint.Application",
 
         var c1000_quaive = new qxjoint.widget.node.Rect('Quaive');
         c1000.addNode(c1000_quaive);
+        paper.addLink(new qxjoint.widget.link.Link(c1000_quaive, c1002_haproxy));
+
 
         var c1001 = new qxjoint.widget.node.JNodeContainer("C1001", "qxjoint/demo/icon/22x22/lxd.png");
         c1001.setWidth(121);
@@ -221,47 +233,7 @@ qx.Class.define("qxjoint.Application",
 
         var c1001_quaive = new qxjoint.widget.node.Rect('Quaive');
         c1001.addNode(c1001_quaive);
-
-        var link1 = new joint.dia.Link({
-            source: { id: dns.getJointNode().id },
-            target: { id: router.getJointNode().id }
-        });
-
-        var link2 = new joint.dia.Link({
-            source: { id: router.getJointNode().id },
-            target: { id: c1003_plone.getJointNode().id }
-        });
-
-        var link_nginx = new joint.dia.Link({
-            source: { id: router.getJointNode().id },
-            target: { id: c1002_nignx.getJointNode().id }
-        });
-
-        var link_varnish = new joint.dia.Link({
-            source: { id: c1002_nignx.getJointNode().id },
-            target: { id: c1002_varnish.getJointNode().id }
-        });
-
-        var link_haproxy = new joint.dia.Link({
-            source: { id: c1002_varnish.getJointNode().id },
-            target: { id: c1002_haproxy.getJointNode().id }
-        });
-
-        var link_quaive1 = new joint.dia.Link({
-            source: { id: c1002_haproxy.getJointNode().id },
-            target: { id: c1000_quaive.getJointNode().id }
-        });
-
-        var link_quaive2 = new joint.dia.Link({
-            source: { id: c1002_haproxy.getJointNode().id },
-            target: { id: c1001_quaive.getJointNode().id }
-        });
-
-        paper.getJointGraph().addCells([
-          link1, link2,
-          link_nginx, link_varnish, link_haproxy,
-          link_quaive1, link_quaive2
-        ]);
+        paper.addLink(new qxjoint.widget.link.Link(c1001_quaive, c1002_haproxy));
       }, this);
 
       main_container.getChildren()[0].setWidth(200);
