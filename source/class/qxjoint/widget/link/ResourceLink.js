@@ -91,9 +91,6 @@ qx.Class.define("qxjoint.widget.link.ResourceLink", {
         left : left,
         top : top
       });
-
-      // var jointPos = e.getPosition();
-      this.debug("Joint link change");
     }
   }
 });

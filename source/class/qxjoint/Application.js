@@ -47,7 +47,7 @@ qx.Class.define("qxjoint.Application",
 
       var paper = new qxjoint.widget.Paper();
       paper.setLinkPinning(false);
-      paper.setLinkClass(qxjoint.widget.link.ResourceLink);
+      // paper.setLinkClass(qxjoint.widget.link.ResourceLink);
 
       // Logo
       layout = new qx.ui.layout.Atom()

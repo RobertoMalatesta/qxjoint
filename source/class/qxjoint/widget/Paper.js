@@ -184,6 +184,11 @@ qx.Class.define("qxjoint.widget.Paper", {
           qxLink.setJointLink(jointLink);
           qxLink.setPaper(this);
           this._links.push(qxLink);
+
+          if (qx.Class.isSubClassOf(qxLink.constructor, qx.ui.core.Widget)) {
+            this.add(qxLink);
+            qxLink.show();
+          }
         }
       },
 
