@@ -76,6 +76,12 @@ qx.Class.define("qxjoint.widget.Paper", {
         this.getNodes().forEach(function(win){
           win.set({zIndex: this._showLinks ? 9 : 10});
         }, this);
+
+        if (this._showLinks) {
+          this._deactivateSelector();
+        } else {
+          this._activateSelector(this.__htmlWidget);
+        }
       },
 
       _applyGraph : function(value, old) {
