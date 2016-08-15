@@ -27,6 +27,24 @@ qx.Mixin.define("qxjoint.widget.MSelector", {
     __sScrollLeft : 0,
     __sScrollTop : 0,
 
+    /**
+     * @return {Integer} The Position of horizontal bar.
+     */
+    getScrollX : function()
+    {
+      var domEl = this.getContentElement().getDomElement();
+      return domEl.scrollLeft;
+    },
+
+    /**
+     * @return {Integer} The Position of vertical bar.
+     */
+    getScrollY : function()
+    {
+      var domEl = this.getContentElement().getDomElement();
+      return domEl.scrollTop;
+    },
+
     _activateSelector : function(clickableWidget)
     {
       if (this.__selectorActivated) {
@@ -75,9 +93,8 @@ qx.Mixin.define("qxjoint.widget.MSelector", {
         return;
       }
 
-      var domEl = this.getContentElement().getDomElement();
-      this.__sScrollLeft = domEl.scrollLeft;
-      this.__sScrollTop = domEl.scrollTop;
+      this.__sScrollLeft = this.getScrollX();
+      this.__sScrollTop = this.getScrollY();
 
       this.__sthisLocation = this.getContentLocation();
       this.__selectorClientLeft = e.getViewportLeft() - this.__sthisLocation.left + this.__sScrollLeft;

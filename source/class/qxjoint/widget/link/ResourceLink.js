@@ -1,4 +1,5 @@
 /**
+ * @ignore(jQuery)
  * @ignore(joint.dia.Link)
  */
 qx.Class.define("qxjoint.widget.link.ResourceLink", {
@@ -51,17 +52,19 @@ qx.Class.define("qxjoint.widget.link.ResourceLink", {
         return;
       }
 
-      var bbox = window.g.rect(window.V(jointView.el).bbox(true)).moveAndExpand({
-          x: - this._strokeWidth,
-          y: - this._strokeWidth,
-          width: 2 * this._strokeWidth,
-          height: 2 * this._strokeWidth
-      });
+      var paper = this.getPaper();
+      var pLocation = paper.getContentLocation();
+      var bbox = jQuery(jointView.el).find('.connection')[0].getBoundingClientRect();
+      var rCoords = {
+        left: bbox.left - pLocation.left,
+        top: bbox.top - pLocation.top
+      }
 
-      var pLocation = this.getPaper().getContentLocation();
+      var centerX = rCoords.left + bbox.width / 2 + paper.getScrollX();
+      var centerY = rCoords.top + bbox.height / 2 + paper.getScrollY();
 
-      var left = Math.round(bbox.x + (bbox.width / 2) - (bounds.width / 2));
-      var top = Math.round(bbox.y + (bbox.height / 2) - (bounds.height / 2));
+      var left = Math.round(centerX - (bounds.width / 2));
+      var top = Math.round(centerY - (bounds.height / 2));
 
       this.setLayoutProperties({
         left : left,
