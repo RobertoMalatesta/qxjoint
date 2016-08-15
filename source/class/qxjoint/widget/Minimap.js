@@ -40,15 +40,23 @@ qx.Class.define("qxjoint.widget.Minimap",
   members : {
    __cssId : null,
 
-  scaleContentToFit : function(opts) {
+  scaleContentToFit : function(opts, resetPaper) {
     opts = opts || {}
-    if (!"padding" in opts) {
-      opts.padding = this.getScalePadding();
-    }
     var action = qx.lang.Function.bind(function() {
-      var jPaper = this.getJointPaper();
       var bounds = this.getBounds();
-      jPaper.setDimensions(bounds.width - 10, bounds.height - 10);
+      var jPaper = this.getJointPaper();
+      var padding = opts.padding || this.getScalePadding();
+      opts.padding = padding;
+
+      if (qx.bom.client.Engine.getName() == "gecko") {
+        opts.fittingBBox = {
+            x: 0 + padding,
+            y: 0 + padding,
+            width: jPaper.options.width - 2 * padding,
+            height: jPaper.options.height - 2 * padding
+        };
+      }
+
       jPaper.scaleContentToFit(opts);
     }, this);
 
@@ -77,14 +85,14 @@ qx.Class.define("qxjoint.widget.Minimap",
      }
    },
 
-   onChangeGraph : function(e) {
+   _onJointGraphChange : function(e) {
      this.scaleContentToFit();
    },
 
-   _applyPaper : function(value) {
+   _applyPaper : function(value, old) {
      // Clear existing papers
      if (this.getJointPaper()) {
-       this.removeAll();
+       this._removeAll();
      }
 
      var action = qx.lang.Function.bind(function() {
@@ -106,7 +114,7 @@ qx.Class.define("qxjoint.widget.Minimap",
 
          value.getJointGraph().on(
            'change',
-           this.onChangeGraph,
+           this._onJointGraphChange,
            this
          );
      }, this);
