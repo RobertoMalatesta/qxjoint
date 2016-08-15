@@ -141,7 +141,7 @@ qx.Class.define("qxjoint.widget.Paper", {
       },
 
       addLink : function(link) {
-        if (!qx.Class.hasOwnMixin(link.constructor, qxjoint.widget.link.MLink)) {
+        if (!qx.Class.hasMixin(link.constructor, qxjoint.widget.link.MLink)) {
             throw new Error("A link must be a include of qxjoint.widget.link.MLink");
         }
 
@@ -217,7 +217,7 @@ qx.Class.define("qxjoint.widget.Paper", {
        * Add a either a wrapped JointJS node and/or a qx.ui.core.Widget.
        */
       addNode : function(node) {
-        if (qx.Class.hasOwnMixin(node.constructor, qxjoint.widget.node.MJointNode)) {
+        if (qx.Class.hasMixin(node.constructor, qxjoint.widget.node.MJointNode)) {
           this.addJointNode(node);
         }
 

@@ -59,7 +59,7 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
     // all nodes dont have to use Move Frame.
     this.setUseMoveFrame(false);
 
-    if (qx.Class.hasOwnMixin(
+    if (qx.Class.hasMixin(
         this.constructor,
         qxjoint.widget.node.MJointNode)) {
       this.constructJointNode();
@@ -227,7 +227,7 @@ qx.Class.define("qxjoint.widget.node.BaseNode",
   members :
   {
     destroy : function() {
-      if (qx.Class.hasOwnMixin(
+      if (qx.Class.hasMixin(
           this.constructor,
           qxjoint.widget.node.MJointNode)) {
         this.destroyJointNode();
