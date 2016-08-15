@@ -13,10 +13,10 @@
  *
  * @asset(qx/icon/${qx.icontheme}/22/actions/document-new.png)
  * @asset(qx/icon/${qx.icontheme}/22/actions/edit-copy.png)
- * @asset(qxjoint/demo/icon/22x22/*)
- * @asset(qxjoint/demo/icon/16x16/*)
+ * @asset(qxjoint_demo/icon/22x22/*)
+ * @asset(qxjoint_demo/icon/16x16/*)
  */
-qx.Class.define("qxjoint.Application",
+qx.Class.define("qxjoint_demo.Application",
 {
   extend : qx.application.Standalone,
   members :
@@ -178,13 +178,13 @@ qx.Class.define("qxjoint.Application",
 
       // Main content
       paper.addListener("change:jointPaper", function(e) {
-        var dns = new qxjoint.widget.node.Rect("DNS", "qxjoint/demo/icon/22x22/cloud-service/dns.png");
+        var dns = new qxjoint.widget.node.Rect("DNS", "qxjoint_demo/icon/22x22/cloud-service/dns.png");
         dns.setAppearance("cloud-service");
         dns.setWidth(130);
         dns.moveTo(10, 100);
         paper.addNode(dns);
 
-        var router = new qxjoint.widget.node.Rect("Router", "qxjoint/demo/icon/22x22/cloud-service/router.png");
+        var router = new qxjoint.widget.node.Rect("Router", "qxjoint_demo/icon/22x22/cloud-service/router.png");
         router.setAppearance("cloud-service");
         router.setWidth(130);
         router.moveTo(363, 94);
@@ -194,7 +194,7 @@ qx.Class.define("qxjoint.Application",
         var rd_link = new qxjoint.widget.link.ResourceLink(router, dns);
         paper.addLink(rd_link);
 
-        var c1002 = new qxjoint.widget.node.JNodeContainer("C1002", "qxjoint/demo/icon/22x22/container/lxd.png");
+        var c1002 = new qxjoint.widget.node.JNodeContainer("C1002", "qxjoint_demo/icon/22x22/container/lxd.png");
         c1002.setWidth(121);
         c1002.setAppearance("container");
         c1002.setAutoReorder(true);
@@ -215,7 +215,7 @@ qx.Class.define("qxjoint.Application",
         paper.addLink(new qxjoint.widget.link.ResourceLink(c1002_varnish, c1002_haproxy));
 
 
-        var c1003 = new qxjoint.widget.node.JNodeContainer("C1003", "qxjoint/demo/icon/22x22/container/lxd.png");
+        var c1003 = new qxjoint.widget.node.JNodeContainer("C1003", "qxjoint_demo/icon/22x22/container/lxd.png");
         c1003.setWidth(121);
         c1003.setAppearance("container");
         c1003.setAutoReorder(true);
@@ -228,7 +228,7 @@ qx.Class.define("qxjoint.Application",
         var c1003_router_link = new qxjoint.widget.link.ResourceLink(c1003_plone, router);
         paper.addLink(c1003_router_link);
 
-        var c1000 = new qxjoint.widget.node.JNodeContainer("C1000", "qxjoint/demo/icon/22x22/container/lxd.png");
+        var c1000 = new qxjoint.widget.node.JNodeContainer("C1000", "qxjoint_demo/icon/22x22/container/lxd.png");
         c1000.setWidth(121);
         c1000.setAppearance("container");
         c1000.setAutoReorder(true);
@@ -241,7 +241,7 @@ qx.Class.define("qxjoint.Application",
         paper.addLink(c1001_quaive_link);
 
 
-        var c1001 = new qxjoint.widget.node.JNodeContainer("C1001", "qxjoint/demo/icon/22x22/container/lxd.png");
+        var c1001 = new qxjoint.widget.node.JNodeContainer("C1001", "qxjoint_demo/icon/22x22/container/lxd.png");
         c1001.setWidth(121);
         c1001.setAppearance("container");
         c1001.setAutoReorder(true);
@@ -271,9 +271,9 @@ qx.Class.define("qxjoint.Application",
       rContainer.add(rLabel)
 
       var rList = new qx.ui.form.List;
-      rList.add(new qx.ui.form.ListItem("q.customer.com", "qxjoint/demo/icon/16x16/resource/dns.png"));
-      rList.add(new qx.ui.form.ListItem("q.your-domain.com", "qxjoint/demo/icon/16x16/resource/dns.png"));
-      rList.add(new qx.ui.form.ListItem("plone.com", "qxjoint/demo/icon/16x16/resource/dns.png"));
+      rList.add(new qx.ui.form.ListItem("q.customer.com", "qxjoint_demo/icon/16x16/resource/dns.png"));
+      rList.add(new qx.ui.form.ListItem("q.your-domain.com", "qxjoint_demo/icon/16x16/resource/dns.png"));
+      rList.add(new qx.ui.form.ListItem("plone.com", "qxjoint_demo/icon/16x16/resource/dns.png"));
       rContainer.add(rList);
 
       rList.setSelectionMode("multi")

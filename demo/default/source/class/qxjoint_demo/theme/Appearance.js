@@ -8,7 +8,7 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.demo.Appearance",
+qx.Theme.define("qxjoint_demo.theme.Appearance",
 {
   extend : qx.theme.indigo.Appearance,
   include : [ qxjoint.theme.Appearance ],

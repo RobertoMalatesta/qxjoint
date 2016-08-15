@@ -8,7 +8,7 @@
 
 ************************************************************************ */
 
-qx.Theme.define("qxjoint.theme.demo.Color",
+qx.Theme.define("qxjoint_demo.theme.Color",
 {
   extend : qx.theme.indigo.Color,
   include : [ qxjoint.theme.Color ],
